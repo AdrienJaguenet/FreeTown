@@ -1,6 +1,6 @@
 settings = {
-	MAP_SIZE = 15,
-	CAMERA_SPEED = 50,
+	MAP_SIZE = 40,
+	CAMERA_SPEED = 500,
 	ISOTILE_HEIGHT = 20,
 	ISOTILE_WIDTH = 32,
 }
@@ -108,15 +108,15 @@ function love.update(dt)
 	local mx = love.mouse.getX()
 	local my = love.mouse.getY()
 	if mx < love.graphics.getWidth() / 10 then
-		camera.x = camera.x + settings.CAMERA_SPEED * dt
+		camera.x = camera.x + settings.CAMERA_SPEED * dt * (1 / camera.zoom)
 	elseif mx > 9 * love.graphics.getWidth() / 10 then
-		camera.x = camera.x - settings.CAMERA_SPEED * dt
+		camera.x = camera.x - settings.CAMERA_SPEED * dt * (1 / camera.zoom)
 	end
 
 	if my < love.graphics.getHeight() / 10 then
-		camera.y = camera.y + settings.CAMERA_SPEED * dt
+		camera.y = camera.y + settings.CAMERA_SPEED * dt * (1 / camera.zoom)
 	elseif my > 9 * love.graphics.getHeight() / 10 then
-		camera.y = camera.y - settings.CAMERA_SPEED * dt
+		camera.y = camera.y - settings.CAMERA_SPEED * dt * (1 / camera.zoom)
 	end
 
 	loveframes.update(dt)
