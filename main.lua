@@ -10,6 +10,8 @@ camera = {
 	zoom = 2
 }
 
+current_tool = 'road'
+
 Tile = { id = 'Tile' }
 Tile.__index = Tile
 
@@ -38,29 +40,29 @@ end
 function loadUI()
 	ui = {
 		toolgrid = loveframes.Create('grid'),
-		roadbutton = loveframes.Create('imagebutton'),
-		housebutton = loveframes.Create('imagebutton'),
-		chimneybutton = loveframes.Create('imagebutton')
 	}
 	ui.toolgrid:SetPos(0, love.graphics.getHeight() - 100)
 	ui.toolgrid:SetRows(1)
 	ui.toolgrid:SetColumns(3)
-	ui.roadbutton:SetImage('resources/gfx/road-horizontal.png')
-	ui.housebutton:SetImage('resources/gfx/house.png')
-	ui.chimneybutton:SetImage('resources/gfx/chimney.png')
 
-	ui.roadbutton:SetText('')
-	ui.housebutton:SetText('')
-	ui.chimneybutton:SetText('')
-
-	ui.roadbutton:SizeToImage()
-	ui.housebutton:SizeToImage()
-	ui.chimneybutton:SizeToImage()
+	createToolButton('roadbutton', 'resources/gfx/road-horizontal.png', 'road')
+	createToolButton('housebutton', 'resources/gfx/house.png', 'house')
+	createToolButton('chimneybutton', 'resources/gfx/chimney.png', 'chimney')
 
 	ui.toolgrid:AddItem(ui.roadbutton, 1, 1)
 	ui.toolgrid:AddItem(ui.chimneybutton, 1, 2)
 	ui.toolgrid:AddItem(ui.housebutton, 1, 3)
 	ui.toolgrid:SetItemAutoSize(true)
+end
+
+function createToolButton(name, image_path, tool_name)
+	ui[name] = loveframes.Create('imagebutton')
+	ui[name]:SetImage(image_path)
+	ui[name]:SetText('')
+	ui[name]:SizeToImage()
+	ui[name].OnClick = function(object)
+		current_tool = tool_name
+	end
 end
 
 function love.load()
@@ -85,6 +87,12 @@ function love.load()
 				extra_height = 38
 			},
 			chimney = {
+				image = love.graphics.newImage('resources/gfx/chimney.png'),
+				extra_height = 38
+			},
+			house = {
+				image = love.graphics.newImage('resources/gfx/house.png'),
+				extra_height = 38
 			}
 		}
 	}
@@ -173,7 +181,7 @@ function love.mousepressed(x, y, k)
 	iso.x = math.floor(iso.x)
 	iso.y = math.floor(iso.y)
 	if iso.x > 0 and iso.x < settings.MAP_SIZE and iso.y > 0 and iso.y < settings.MAP_SIZE then
-		map[iso.x][iso.y].type = 'road'
+		map[iso.x][iso.y].type = current_tool
 	end
 
 	loveframes.mousepressed(x, y, k)
