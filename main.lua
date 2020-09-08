@@ -198,6 +198,31 @@ function love.load()
 end
 
 function love.update(dt)
+	for i=1,settings.MAP_SIZE do
+		for j=1,settings.MAP_SIZE do
+			local tile = map[i][j]
+			local total_fields = 0
+			if tile.type == 'farm' then
+				for x=i-2,i+2 do
+					for y=j-2,j+2 do
+						local ftile = map[x][y]
+						if ftile and ftile.type == 'field' then
+							total_fields = total_fields + 1
+						end
+					end
+				end
+				if total_fields < 10 and math.random(1, 20) == 1 then
+					local x = math.random(i-2, i+3)
+					local y = math.random(j-2, j+3)
+					local ftile = map[x][y]
+					if ftile and (ftile.type == 'grass' or ftile.type == 'trees') then
+						ftile.type = 'field'
+					end
+				end
+			end
+		end
+	end
+
 	-- handle camera movement
 	local mx = love.mouse.getX()
 	local my = love.mouse.getY()
