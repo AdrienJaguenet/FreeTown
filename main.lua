@@ -63,15 +63,17 @@ function loadUI()
 	ui.resources_display:SetFont(ui.fonts.default)
 
 	ui.toolgrid:SetRows(1)
-	ui.toolgrid:SetColumns(3)
+	ui.toolgrid:SetColumns(4)
 
-	createToolButton('roadbutton', 'resources/gfx/road-horizontal.png', 'road')
+	createToolButton('roadbutton', 'resources/gfx/road_horizontal.png', 'road')
 	createToolButton('housebutton', 'resources/gfx/house.png', 'house')
 	createToolButton('chimneybutton', 'resources/gfx/chimney.png', 'chimney')
+	createToolButton('farmbutton', 'resources/gfx/farm.png', 'farm')
 
 	ui.toolgrid:AddItem(ui.roadbutton, 1, 1)
 	ui.toolgrid:AddItem(ui.chimneybutton, 1, 2)
 	ui.toolgrid:AddItem(ui.housebutton, 1, 3)
+	ui.toolgrid:AddItem(ui.farmbutton, 1, 4)
 	ui.toolgrid:SetItemAutoSize(true)
 
 	ui.bottom_panel:SetPos(0, love.graphics.getHeight() - 100)
@@ -98,28 +100,96 @@ function love.load()
 	gfx = {	
 		tiles = {
 			tile_select = {
-				image = love.graphics.newImage('resources/gfx/tile-select.png'),
-				extra_height = 0
+				layers = {
+					{
+						image = love.graphics.newImage('resources/gfx/tile-select.png'),
+						extra_height = 0
+					}
+				},
 			},
 			grass = {
-				image = love.graphics.newImage('resources/gfx/grass.png'),
-				extra_height = 38
+				layers = {
+					{
+						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						extra_height = 38
+					},
+					{
+						image = love.graphics.newImage('resources/gfx/grass_foreground.png'),
+						extra_height = 38
+					},
+				},
 			},
 			road = {
-				image = love.graphics.newImage('resources/gfx/road-horizontal.png'),
-				extra_height = 38
+				layers = {
+					{
+						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						extra_height = 38
+					},
+					{
+						image = love.graphics.newImage('resources/gfx/road_horizontal.png'),
+						extra_height = 38
+					},
+				},
 			},
 			trees = {
-				image = love.graphics.newImage('resources/gfx/trees.png'),
-				extra_height = 38
+				layers = {
+					{
+						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						extra_height = 38
+					},
+					{
+						image = love.graphics.newImage('resources/gfx/trees.png'),
+						extra_height = 38
+					},
+				},
 			},
 			chimney = {
-				image = love.graphics.newImage('resources/gfx/chimney.png'),
-				extra_height = 38
+				layers = {
+					{
+						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						extra_height = 38
+					},
+					{
+						image = love.graphics.newImage('resources/gfx/chimney.png'),
+						extra_height = 38
+					},
+				},
 			},
 			house = {
-				image = love.graphics.newImage('resources/gfx/house.png'),
-				extra_height = 38
+				layers = {
+					{
+						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						extra_height = 38
+					},
+					{
+						image = love.graphics.newImage('resources/gfx/house.png'),
+						extra_height = 38
+					},
+				},
+			},
+			farm = {
+				layers = {
+					{
+						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						extra_height = 38
+					},
+					{
+						image = love.graphics.newImage('resources/gfx/farm.png'),
+						extra_height = 38
+					},
+				},
+			},
+			field = {
+				layers = {
+					{
+						image = love.graphics.newImage('resources/gfx/field_background.png'),
+						extra_height = 38
+					},
+					{
+						image = love.graphics.newImage('resources/gfx/field_wheat.png'),
+						extra_height = 38
+					},
+				},
 			}
 		}
 	}
@@ -165,40 +235,48 @@ function screen2iso(cx, cy)
 	}
 end
 
-function drawIsoTile(i, j, tile)
+function drawIsoTile(i, j, tile, layer)
+	local sprite = gfx.tiles[tile.type].layers[layer]
+	if not sprite then
+		return
+	end
 	local draw_origin = iso2screen(i, j)
-	local gfx = gfx.tiles[tile.type]
-	draw_origin.y = draw_origin.y - gfx.extra_height
-	love.graphics.draw(gfx.image, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
+	draw_origin.y = draw_origin.y - sprite.extra_height
+	love.graphics.draw(sprite.image, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
 		0, camera.zoom, camera.zoom)
 end
 
 function love.draw()
 
-	-- draw the upper half
-	for i=1,settings.MAP_SIZE do
-		for j=1,i do
-			local x = settings.MAP_SIZE - i + j
-			local y = j
-			local tile = map[x][y]
-			drawIsoTile(x, y, tile)
+	-- for every layer
+	for layer=1,2 do
+		-- draw the upper half
+		for i=1,settings.MAP_SIZE do
+			for j=1,i do
+				local x = settings.MAP_SIZE - i + j
+				local y = j
+				local tile = map[x][y]
+				drawIsoTile(x, y, tile, layer)
+			end
 		end
-	end
-	-- draw the lower half 
-	for i=settings.MAP_SIZE,1,-1 do
-		for j=1,i do
-			local x = j
-			local y = settings.MAP_SIZE - i + j
-			local tile = map[x][y]
-			drawIsoTile(x, y, tile)
+		-- draw the lower half 
+		for i=settings.MAP_SIZE,1,-1 do
+			for j=1,i do
+				local x = j
+				local y = settings.MAP_SIZE - i + j
+				local tile = map[x][y]
+				drawIsoTile(x, y, tile, layer)
+			end
+		end
+		if layer == 1 then
+			-- draw the hover
+			local hover_coords = screen2iso(love.mouse.getX(), love.mouse.getY())
+			hover_coords.y = math.floor(hover_coords.y)
+			hover_coords.x = math.floor(hover_coords.x)
+			drawIsoTile(hover_coords.x, hover_coords.y, {type = 'tile_select'}, 1)
 		end
 	end
 
-	-- draw the hover
-	local hover_coords = screen2iso(love.mouse.getX(), love.mouse.getY())
-	hover_coords.y = math.floor(hover_coords.y)
-	hover_coords.x = math.floor(hover_coords.x)
-	drawIsoTile(hover_coords.x, hover_coords.y, {type = 'tile_select'})
 
 	local str=''
 	for k,v in pairs(resources) do
