@@ -69,6 +69,7 @@ function love.load()
 	loveframes = require('libs.loveframes')
 	love.window.setMode(640, 480)
 	love.window.setTitle('FreeTown')
+	love.window.setFullscreen(true)
 	love.graphics.setDefaultFilter('nearest')
 	gfx = {	
 		tiles = {
