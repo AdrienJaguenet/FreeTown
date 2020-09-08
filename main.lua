@@ -197,11 +197,18 @@ function love.load()
 	createMap()
 end
 
+function getTile(x, y)
+	local row = map[x]
+	if row then
+		return map[x][y]
+	end
+end
+
 function countTilesAround(i, j, radius, fn)
 	local acc = 0
 	for x=i-radius,i+radius do
 		for y=j-radius,j+radius do
-			local ftile = map[x][y]
+			local ftile = getTile(x, y)
 			if ftile and fn(ftile) then
 				acc = acc + 1
 			end
@@ -210,25 +217,33 @@ function countTilesAround(i, j, radius, fn)
 	return acc
 end
 
-function updateFarm(i, j)
-	total_fields = countTilesAround(i, j, 2, function(t) return t.type == 'field' end)
-	if total_fields < 10 and math.random(1, 20) == 1 then
-		local x = math.random(i-2, i+3)
-		local y = math.random(j-2, j+3)
-		local ftile = map[x][y]
-		if ftile and (ftile.type == 'grass' or ftile.type == 'trees') then
-			ftile.type = 'field'
+update_funcs = {
+	['farm'] = function(i, j, dt)
+		total_fields = countTilesAround(i, j, 2, function(t) return t.type == 'field' end)
+		if total_fields < 10 and math.random(1, 20) == 1 then
+			local x = math.random(i-2, i+3)
+			local y = math.random(j-2, j+3)
+			local ftile = getTile(x, y)
+			if ftile and (ftile.type == 'grass' or ftile.type == 'trees') then
+				ftile.type = 'field'
+			end
+		end
+	end,
+	['grass'] = function(i, j, dt)
+		total_forest = countTilesAround(i, j, 2, function(t) return t.type == 'trees' end)
+		if math.random(1, 100000) < total_forest then
+			map[i][j].type = 'trees'
 		end
 	end
-end
+}
 
 function love.update(dt)
 	for i=1,settings.MAP_SIZE do
 		for j=1,settings.MAP_SIZE do
 			local tile = map[i][j]
 			local total_fields = 0
-			if tile.type == 'farm' then
-				updateFarm(i, j)
+			if update_funcs[tile.type] then
+				update_funcs[tile.type](i, j, dt)
 			end
 		end
 	end
