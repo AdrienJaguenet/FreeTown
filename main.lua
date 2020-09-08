@@ -1,12 +1,13 @@
 settings = {
 	MAP_SIZE = 15,
 	CAMERA_SPEED = 50,
-	ISOTILE_HEIGHT = 21,
+	ISOTILE_HEIGHT = 20,
 	ISOTILE_WIDTH = 32,
 }
 camera = {
 	x = 0,
-	y = 0
+	y = 0,
+	zoom = 2
 }
 
 Tile = { id = 'Tile' }
@@ -14,7 +15,7 @@ Tile.__index = Tile
 
 function Tile:new(t)
 	local this = {
-		gfx = gfx.tiles[t]
+		type = t
 	}
 	setmetatable(this, Tile)
 	return this
@@ -25,12 +26,46 @@ function createMap()
 	for i=1,settings.MAP_SIZE do
 		map[i] = {}
 		for j=1,settings.MAP_SIZE do
-			map[i][j] = Tile:new('grass')
+			local t = 'grass'
+			if math.random(1,3) == 1 then
+				t = 'trees'
+			end
+			map[i][j] = Tile:new(t)
 		end
 	end
 end
 
+function loadUI()
+	ui = {
+		toolgrid = loveframes.Create('grid'),
+		roadbutton = loveframes.Create('imagebutton'),
+		housebutton = loveframes.Create('imagebutton'),
+		chimneybutton = loveframes.Create('imagebutton')
+	}
+	ui.toolgrid:SetPos(0, love.graphics.getHeight() - 100)
+	ui.toolgrid:SetRows(1)
+	ui.toolgrid:SetColumns(3)
+	ui.roadbutton:SetImage('resources/gfx/road-horizontal.png')
+	ui.housebutton:SetImage('resources/gfx/house.png')
+	ui.chimneybutton:SetImage('resources/gfx/chimney.png')
+
+	ui.roadbutton:SetText('')
+	ui.housebutton:SetText('')
+	ui.chimneybutton:SetText('')
+
+	ui.roadbutton:SizeToImage()
+	ui.housebutton:SizeToImage()
+	ui.chimneybutton:SizeToImage()
+
+	ui.toolgrid:AddItem(ui.roadbutton, 1, 1)
+	ui.toolgrid:AddItem(ui.chimneybutton, 1, 2)
+	ui.toolgrid:AddItem(ui.housebutton, 1, 3)
+	ui.toolgrid:SetItemAutoSize(true)
+end
+
 function love.load()
+	loveframes = require('libs.loveframes')
+	love.graphics.setDefaultFilter('nearest')
 	gfx = {	
 		tiles = {
 			tile_select = {
@@ -44,9 +79,16 @@ function love.load()
 			road = {
 				image = love.graphics.newImage('resources/gfx/road-horizontal.png'),
 				extra_height = 38
+			},
+			trees = {
+				image = love.graphics.newImage('resources/gfx/trees.png'),
+				extra_height = 38
+			},
+			chimney = {
 			}
 		}
 	}
+	loadUI()
 	createMap()
 end
 
@@ -65,20 +107,22 @@ function love.update(dt)
 	elseif my > 9 * love.graphics.getHeight() / 10 then
 		camera.y = camera.y - settings.CAMERA_SPEED * dt
 	end
+
+	loveframes.update(dt)
 end
 
 function iso2screen(i, j)
 	return {
-		x = (i + j + 2) * settings.ISOTILE_WIDTH / 2 + 1,
-		y = - settings.ISOTILE_HEIGHT/2 + j * settings.ISOTILE_HEIGHT / 2 - i * settings.ISOTILE_HEIGHT / 2 + 1
+		x = (i + j + 2) * settings.ISOTILE_WIDTH / 2,
+		y = -settings.ISOTILE_HEIGHT/2 + j * settings.ISOTILE_HEIGHT / 2 - i * settings.ISOTILE_HEIGHT / 2
 	}
 end
 
 function screen2iso(cx, cy)
-	cx = cx - camera.x
-	cy = cy - camera.y
-	local x0 = settings.ISOTILE_HEIGHT / 2 + cx * (settings.ISOTILE_HEIGHT / settings.ISOTILE_WIDTH)
-	local y0 = settings.ISOTILE_HEIGHT / 2 - cx * (settings.ISOTILE_HEIGHT / settings.ISOTILE_WIDTH)
+	cx = (cx / camera.zoom - camera.x)
+	cy = (cy / camera.zoom - camera.y)
+	local x0 =  cx * (settings.ISOTILE_HEIGHT / settings.ISOTILE_WIDTH)
+	local y0 =  -cx * (settings.ISOTILE_HEIGHT / settings.ISOTILE_WIDTH)
 
 	return {
 		x = (x0 - cy) / settings.ISOTILE_HEIGHT - 1,
@@ -88,8 +132,10 @@ end
 
 function drawIsoTile(i, j, tile)
 	local draw_origin = iso2screen(i, j)
-	draw_origin.y = draw_origin.y - tile.gfx.extra_height
-	love.graphics.draw(tile.gfx.image, draw_origin.x + camera.x, draw_origin.y + camera.y)
+	local gfx = gfx.tiles[tile.type]
+	draw_origin.y = draw_origin.y - gfx.extra_height
+	love.graphics.draw(gfx.image, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
+		0, camera.zoom, camera.zoom)
 end
 
 function love.draw()
@@ -117,7 +163,9 @@ function love.draw()
 	local hover_coords = screen2iso(love.mouse.getX(), love.mouse.getY())
 	hover_coords.y = math.floor(hover_coords.y)
 	hover_coords.x = math.floor(hover_coords.x)
-	drawIsoTile(hover_coords.x, hover_coords.y, {gfx = gfx.tiles.tile_select})
+	drawIsoTile(hover_coords.x, hover_coords.y, {type = 'tile_select'})
+
+	loveframes.draw()
 end
 
 function love.mousepressed(x, y, k)
@@ -125,7 +173,29 @@ function love.mousepressed(x, y, k)
 	iso.x = math.floor(iso.x)
 	iso.y = math.floor(iso.y)
 	if iso.x > 0 and iso.x < settings.MAP_SIZE and iso.y > 0 and iso.y < settings.MAP_SIZE then
-		map[iso.x][iso.y].gfx = gfx.tiles.road
+		map[iso.x][iso.y].type = 'road'
+	end
+
+	loveframes.mousepressed(x, y, k)
+end
+
+function love.mousereleased(x, y, k)
+	loveframes.mousereleased(x, y, k)
+end
+
+function love.keyreleased(k)
+	loveframes.keyreleased(k)
+end
+
+function love.keypressed(k)
+	loveframes.keypressed(k)
+end
+
+function love.wheelmoved(x, y)
+	if y == -1 then
+		camera.zoom = camera.zoom / 2
+	elseif y == 1 then
+		camera.zoom = camera.zoom * 2
 	end
 end
 
