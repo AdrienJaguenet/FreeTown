@@ -3,6 +3,7 @@ settings = {
 	CAMERA_SPEED = 500,
 	ISOTILE_HEIGHT = 20,
 	ISOTILE_WIDTH = 32,
+	VERSION = '0.0.1-afarensis'
 }
 camera = {
 	x = 0,
@@ -39,8 +40,16 @@ end
 
 function loadUI()
 	ui = {
+		fonts = {
+			default = love.graphics.newFont('resources/fonts/VCR_OSD_MONO_1.001.ttf', 24),
+		},
 		toolgrid = loveframes.Create('grid'),
+		version = loveframes.Create('text')
 	}
+	ui.version:SetPos(0, 0)
+	ui.version:SetText(settings.VERSION)
+	ui.version:SetFont(ui.fonts.default)
+
 	ui.toolgrid:SetPos(0, love.graphics.getHeight() - 100)
 	ui.toolgrid:SetRows(1)
 	ui.toolgrid:SetColumns(3)
@@ -107,15 +116,15 @@ function love.update(dt)
 	-- handle camera movement
 	local mx = love.mouse.getX()
 	local my = love.mouse.getY()
-	if mx < love.graphics.getWidth() / 10 then
+	if mx < love.graphics.getWidth() / 100 then
 		camera.x = camera.x + settings.CAMERA_SPEED * dt * (1 / camera.zoom)
-	elseif mx > 9 * love.graphics.getWidth() / 10 then
+	elseif mx > 99 * love.graphics.getWidth() / 100 then
 		camera.x = camera.x - settings.CAMERA_SPEED * dt * (1 / camera.zoom)
 	end
 
-	if my < love.graphics.getHeight() / 10 then
+	if my < love.graphics.getHeight() / 100 then
 		camera.y = camera.y + settings.CAMERA_SPEED * dt * (1 / camera.zoom)
-	elseif my > 9 * love.graphics.getHeight() / 10 then
+	elseif my > 99 * love.graphics.getHeight() / 100 then
 		camera.y = camera.y - settings.CAMERA_SPEED * dt * (1 / camera.zoom)
 	end
 
