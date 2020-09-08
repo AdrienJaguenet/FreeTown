@@ -11,6 +11,13 @@ camera = {
 	zoom = 2
 }
 
+resources = {
+	population = 1,
+	food = 10,
+	power = 0,
+	minerals = 0
+}
+
 current_tool = 'road'
 
 Tile = { id = 'Tile' }
@@ -43,14 +50,18 @@ function loadUI()
 		fonts = {
 			default = love.graphics.newFont('resources/fonts/VCR_OSD_MONO_1.001.ttf', 24),
 		},
+		bottom_panel = loveframes.Create('panel'),
 		toolgrid = loveframes.Create('grid'),
-		version = loveframes.Create('text')
+		version = loveframes.Create('text'),
+		resources_display = loveframes.Create('text')
+
 	}
 	ui.version:SetPos(0, 0)
 	ui.version:SetText(settings.VERSION)
 	ui.version:SetFont(ui.fonts.default)
 
-	ui.toolgrid:SetPos(0, love.graphics.getHeight() - 100)
+	ui.resources_display:SetFont(ui.fonts.default)
+
 	ui.toolgrid:SetRows(1)
 	ui.toolgrid:SetColumns(3)
 
@@ -62,6 +73,10 @@ function loadUI()
 	ui.toolgrid:AddItem(ui.chimneybutton, 1, 2)
 	ui.toolgrid:AddItem(ui.housebutton, 1, 3)
 	ui.toolgrid:SetItemAutoSize(true)
+
+	ui.bottom_panel:SetPos(0, love.graphics.getHeight() - 100)
+	ui.resources_display:SetParent(ui.bottom_panel)
+	ui.toolgrid:SetParent(ui.bottom_panel)
 end
 
 function createToolButton(name, image_path, tool_name)
@@ -184,6 +199,12 @@ function love.draw()
 	hover_coords.y = math.floor(hover_coords.y)
 	hover_coords.x = math.floor(hover_coords.x)
 	drawIsoTile(hover_coords.x, hover_coords.y, {type = 'tile_select'})
+
+	local str=''
+	for k,v in pairs(resources) do
+		str = str..' | '..k..': '..v
+	end
+	ui.resources_display:SetText(str)
 
 	loveframes.draw()
 end
