@@ -1,7 +1,7 @@
 settings = {
 	MAP_SIZE = 15,
 	CAMERA_SPEED = 50,
-	ISOTILE_HEIGHT = 20,
+	ISOTILE_HEIGHT = 21,
 	ISOTILE_WIDTH = 32,
 }
 camera = {
