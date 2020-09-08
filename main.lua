@@ -146,7 +146,7 @@ function love.load()
 			chimney = {
 				layers = {
 					{
-						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						image = love.graphics.newImage('resources/gfx/concrete_background.png'),
 						extra_height = 38
 					},
 					{
@@ -158,7 +158,7 @@ function love.load()
 			house = {
 				layers = {
 					{
-						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						image = love.graphics.newImage('resources/gfx/concrete_background.png'),
 						extra_height = 38
 					},
 					{
@@ -170,7 +170,7 @@ function love.load()
 			farm = {
 				layers = {
 					{
-						image = love.graphics.newImage('resources/gfx/grass_background.png'),
+						image = love.graphics.newImage('resources/gfx/concrete_background.png'),
 						extra_height = 38
 					},
 					{
