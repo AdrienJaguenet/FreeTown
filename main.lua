@@ -205,8 +205,12 @@ end
 function love.wheelmoved(x, y)
 	if y == -1 then
 		camera.zoom = camera.zoom / 2
+		camera.x = camera.x * 2
+		camera.y = camera.y * 2
 	elseif y == 1 then
 		camera.zoom = camera.zoom * 2
+		camera.x = camera.x / 2
+		camera.y = camera.y / 2
 	end
 end
 
