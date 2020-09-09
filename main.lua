@@ -18,14 +18,13 @@ resources = {
 	minerals = 0
 }
 
-current_tool = 'road'
-
 Tile = { id = 'Tile' }
 Tile.__index = Tile
 
 function Tile:new(t)
 	local this = {
-		type = t
+		type = t,
+		assigned_workers = 0
 	}
 	setmetatable(this, Tile)
 	return this
@@ -49,6 +48,7 @@ function love.load()
 	loveframes = require('libs.loveframes')
 	require('tiles')
 	require('ui')
+	require('tools')
 	love.window.setMode(640, 480)
 	love.window.setTitle('FreeTown')
 	love.window.setFullscreen(true)
@@ -205,7 +205,7 @@ function love.mousepressed(x, y, k)
 	iso.x = math.floor(iso.x)
 	iso.y = math.floor(iso.y)
 	if iso.x > 0 and iso.x < settings.MAP_SIZE and iso.y > 0 and iso.y < settings.MAP_SIZE then
-		map[iso.x][iso.y].type = current_tool
+		tools[current_tool].use(iso.x, iso.y)
 	end
 
 	loveframes.mousepressed(x, y, k)
