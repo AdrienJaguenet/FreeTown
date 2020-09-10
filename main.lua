@@ -45,7 +45,7 @@ function createMap()
 end
 
 function love.load()
-	loveframes = require('libs.loveframes')
+	yui = require('libs.yaoui.yaoui')
 	require('tiles')
 	require('ui')
 	require('tools')
@@ -126,7 +126,8 @@ function love.update(dt)
 		camera.y = camera.y - settings.CAMERA_SPEED * dt * (1 / camera.zoom)
 	end
 
-	loveframes.update(dt)
+	yui.update({ui.main_view})
+	ui.main_view:update(dt)
 end
 
 function iso2screen(i, j)
@@ -195,9 +196,8 @@ function love.draw()
 	for k,v in pairs(resources) do
 		str = str..' | '..k..': '..v
 	end
-	ui.resources_display:SetText(str)
-
-	loveframes.draw()
+	
+	ui.main_view:draw()
 end
 
 function love.mousepressed(x, y, k)
@@ -208,19 +208,15 @@ function love.mousepressed(x, y, k)
 		tools[current_tool].use(iso.x, iso.y)
 	end
 
-	loveframes.mousepressed(x, y, k)
 end
 
 function love.mousereleased(x, y, k)
-	loveframes.mousereleased(x, y, k)
 end
 
 function love.keyreleased(k)
-	loveframes.keyreleased(k)
 end
 
 function love.keypressed(k)
-	loveframes.keypressed(k)
 end
 
 function love.wheelmoved(x, y)

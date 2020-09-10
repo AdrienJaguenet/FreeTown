@@ -1,0 +1,3 @@
+[submodule "libs/yaoui"]
+	path = libs/yaoui
+	url = https://github.com/AdrienJaguenet/yaoui
