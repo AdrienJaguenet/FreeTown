@@ -14,7 +14,7 @@ tools = {
 	['house'] = buildTool('house'),
 	['farm'] = buildTool('farm'),
 	['info'] = {
-		use = showTileInfo 
+		use = function() end
 	}
 }
 
