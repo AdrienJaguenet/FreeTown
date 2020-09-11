@@ -97,6 +97,14 @@ update_funcs = {
 		if math.random(1, 100000) < total_forest then
 			map[i][j].type = 'trees'
 		end
+	end,
+	['chimney'] = function(i, j, dt)
+		local x = math.random(i-2, i+3)
+		local y = math.random(j-2, j+3)
+		local ftile = getTile(x, y)
+		if ftile and (ftile.type == 'trees') then
+			ftile.type = 'grass'
+		end
 	end
 }
 
