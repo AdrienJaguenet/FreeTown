@@ -8,7 +8,14 @@ function loadUI()
 		},
 		main_view = yui.View(0, 0, love.graphics.getWidth(), love.graphics.getHeight(), {
 			yui.Stack({
-				yui.Label({text = 'XD'}),
+				name = 'main_stack',
+				yui.Flow({
+					name = 'top_bar',
+					yui.Label({text = settings.VERSION}),
+					right = {
+						yui.Label({name = 'fps_label', text = 'FPS'})
+					}
+				}),
 				toolButton('info', 'info'),
 				bottom = yui.Flow({
 					toolButton('road', 'road_horizontal'),
@@ -19,6 +26,10 @@ function loadUI()
 			})
 		})
 	}
+end
+
+function getFPSLabel()
+	return ui.main_view.main_stack.top_bar.right[1]
 end
 
 function toolButton(name, img_name)

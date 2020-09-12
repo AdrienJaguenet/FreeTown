@@ -199,6 +199,8 @@ function love.draw()
 		end
 	end
 
+	getFPSLabel():setText(love.timer.getFPS()..' FPS')
+
 
 	local str=''
 	for k,v in pairs(resources) do
