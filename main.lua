@@ -42,6 +42,17 @@ function createMap()
 			map[i][j] = Tile:new(t)
 		end
 	end
+	local sx = math.random(1, settings.MAP_SIZE)
+	for i=1,settings.MAP_SIZE do
+		map[sx][i].type = 'water'
+		if math.random(1, 3) == 1 then
+			sx = math.max(1, sx - 1)
+			map[sx][i].type = 'water'
+		elseif math.random(1, 3) == 1 then
+			sx = math.min(settings.MAP_SIZE, sx + 1)
+			map[sx][i].type = 'water'
+		end
+	end
 end
 
 function love.load()

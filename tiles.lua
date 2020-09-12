@@ -8,6 +8,14 @@ function loadTiles()
 				}
 			},
 		},
+		water = {
+			layers = {
+				{
+					image = love.graphics.newImage('resources/gfx/water.png'),
+					extra_height = 38
+				}
+			}
+		},
 		grass = {
 			layers = {
 				{
