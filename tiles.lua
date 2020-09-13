@@ -103,3 +103,19 @@ function loadTiles()
 	}
 end
 
+Tile = { id = 'Tile' }
+Tile.__index = Tile
+
+function Tile:new(t)
+	local this = {
+		type = t,
+		assigned_workers = 0
+	}
+	setmetatable(this, Tile)
+	return this
+end
+
+function Tile:getSprite(layer)
+	return gfx.tiles[self.type].layers[layer]
+end
+

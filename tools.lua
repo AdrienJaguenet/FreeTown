@@ -14,7 +14,13 @@ tools = {
 	['house'] = buildTool('house'),
 	['farm'] = buildTool('farm'),
 	['info'] = {
-		use = function() print('info') end
+		use = function(i, j) 
+			if map[i][j].type == 'farm' then
+				building_selected = true
+			else
+				building_selected = false
+			end
+		end
 	}
 }
 

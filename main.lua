@@ -18,18 +18,6 @@ resources = {
 	minerals = 0
 }
 
-Tile = { id = 'Tile' }
-Tile.__index = Tile
-
-function Tile:new(t)
-	local this = {
-		type = t,
-		assigned_workers = 0
-	}
-	setmetatable(this, Tile)
-	return this
-end
-
 function createMap()
 	map = {}
 	for i=1,settings.MAP_SIZE do
@@ -145,8 +133,10 @@ function love.update(dt)
 		camera.y = camera.y - settings.CAMERA_SPEED * dt * (1 / camera.zoom)
 	end
 
-	yui.update({ui.main_view})
+	yui.update({ui.top_bar, ui.main_view, ui.building_view})
 	ui.main_view:update(dt)
+	ui.top_info:update(dt)
+	ui.building_view:update(dt)
 end
 
 function iso2screen(i, j)
@@ -169,7 +159,7 @@ function screen2iso(cx, cy)
 end
 
 function drawIsoTile(i, j, tile, layer)
-	local sprite = gfx.tiles[tile.type].layers[layer]
+	local sprite = tile:getSprite(layer)
 	if not sprite then
 		return
 	end
@@ -206,7 +196,7 @@ function love.draw()
 			local hover_coords = screen2iso(love.mouse.getX(), love.mouse.getY())
 			hover_coords.y = math.floor(hover_coords.y)
 			hover_coords.x = math.floor(hover_coords.x)
-			drawIsoTile(hover_coords.x, hover_coords.y, {type = 'tile_select'}, 1)
+			drawIsoTile(hover_coords.x, hover_coords.y, Tile:new('tile_select'), 1)
 		end
 	end
 
@@ -218,7 +208,11 @@ function love.draw()
 		str = str..' | '..k..': '..v
 	end
 	
+	ui.top_info:draw()
 	ui.main_view:draw()
+	if building_selected then
+		ui.building_view:draw()
+	end
 end
 
 function love.mousepressed(x, y, k)
