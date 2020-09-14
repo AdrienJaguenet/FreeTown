@@ -158,19 +158,38 @@ function screen2iso(cx, cy)
 	}
 end
 
-function drawIsoTile(i, j, tile, layer)
+function drawIsoTile(i, j, tile, settings)
+	local layer = settings.layer or #gfx.tiles[tile.type].layers
+	local color = settings.color or {1, 1, 1}
 	local sprite = tile:getSprite(layer)
 	if not sprite then
 		return
 	end
 	local draw_origin = iso2screen(i, j)
 	draw_origin.y = draw_origin.y - sprite.extra_height
+	local c1, c2, c3 = love.graphics.getColor()
+	love.graphics.setColor(color[1], color[2], color[3])
 	love.graphics.draw(sprite.image, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
 		0, camera.zoom, camera.zoom)
+	love.graphics.setColor(c1, c2, c3)
+end
+
+function drawTool(i, j, tool)
+	local color = {}
+	if tool.canUse(i, j) then
+		color = {.25, .75, .25}
+	else
+		color = {.75, .25, .25}
+	end
+	drawIsoTile(i, j, Tile:new(tool.hoverTile), {color = color})
 end
 
 function love.draw()
 
+	local hover_coords = screen2iso(love.mouse.getX(), love.mouse.getY())
+	local tool = tools[current_tool]
+	hover_coords.y = math.floor(hover_coords.y)
+	hover_coords.x = math.floor(hover_coords.x)
 	-- for every layer
 	for layer=1,2 do
 		-- draw the upper half
@@ -179,7 +198,11 @@ function love.draw()
 				local x = settings.MAP_SIZE - i + j
 				local y = j
 				local tile = map[x][y]
-				drawIsoTile(x, y, tile, layer)
+				drawIsoTile(x, y, tile, {layer = layer})
+				if hover_coords.x == x and hover_coords.y == y then
+					-- draw the hover
+					drawTool(x, y, tool)
+				end
 			end
 		end
 		-- draw the lower half 
@@ -188,15 +211,12 @@ function love.draw()
 				local x = j
 				local y = settings.MAP_SIZE - i + j
 				local tile = map[x][y]
-				drawIsoTile(x, y, tile, layer)
+				drawIsoTile(x, y, tile, {layer = layer})
+				if hover_coords.x == x and hover_coords.y == y then
+					-- draw the hover
+					drawTool(x, y, tool)
+				end
 			end
-		end
-		if layer == 1 then
-			-- draw the hover
-			local hover_coords = screen2iso(love.mouse.getX(), love.mouse.getY())
-			hover_coords.y = math.floor(hover_coords.y)
-			hover_coords.x = math.floor(hover_coords.x)
-			drawIsoTile(hover_coords.x, hover_coords.y, Tile:new('tile_select'), 1)
 		end
 	end
 
@@ -217,10 +237,14 @@ end
 
 function love.mousepressed(x, y, k)
 	local iso = screen2iso(x, y)
+	local tool = tools[current_tool]
 	iso.x = math.floor(iso.x)
 	iso.y = math.floor(iso.y)
 	if iso.x > 0 and iso.x < settings.MAP_SIZE and iso.y > 0 and iso.y < settings.MAP_SIZE then
-		tools[current_tool].use(iso.x, iso.y)
+		if tool.canUse(iso.x, iso.y) then
+			tool.use(iso.x, iso.y)
+		else
+		end
 	end
 
 end
