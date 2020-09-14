@@ -45,18 +45,38 @@ function loadUI()
 							name = 'closeButton',
 							image = love.graphics.newImage('resources/gfx/button_close.png'),
 							onClick = function(button)
-								building_selected = false
+								building_selected = nil 
 							end}),
 					}
 				}),
 				yui.Stack({
 					name = 'window_body',
-					yui.Label({name = 'workers', text = 'workers: ####'})
+					NumericField('workers')
 				})
 			}),
 			background = {0.5, 0.5, 0.25}
 		})
 	}
+end
+
+function NumericField(name)
+	return yui.Flow({
+		name = name,
+		yui.Label({text = name..': '}),
+		yui.Button({name = 'decrease_button', icon = 'fa-minus', onClick = function(object)
+			if building_selected.workers > 0 then
+				building_selected.workers = building_selected.workers - 1
+				resources.used_workers = resources.used_workers - 1
+			end
+		end}),
+		yui.Label({name = 'value', text = '#####'}),
+		yui.Button({name = 'increase_button', icon = 'fa-plus', onClick = function(object)
+			if resources.workers > resources.used_workers then
+				building_selected.workers = building_selected.workers + 1
+				resources.used_workers = resources.used_workers + 1
+			end
+		end}),
+	})
 end
 
 function getFPSLabel()
@@ -68,7 +88,11 @@ function getResourceLabel(res)
 end
 
 function getAssignedWorkersLabel(res)
-	return ui.building_view[1].window_body.workers
+	return ui.building_view[1].window_body.workers.value
+end
+
+function getBuildingNameLabel()
+	return ui.building_view[1].window_header.title
 end
 
 function toolButton(name, img_name)

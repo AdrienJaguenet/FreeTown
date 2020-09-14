@@ -34,7 +34,7 @@ tools = {
 			if map[i][j].type == 'farm' then
 				building_selected = map[i][j]
 			else
-				building_selected = false
+				building_selected = nil
 			end
 		end,
 		canUse = function() return true end

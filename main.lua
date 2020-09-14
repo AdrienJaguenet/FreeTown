@@ -83,7 +83,7 @@ update_funcs = {
 	['farm'] = function(i, j, dt)
 		local farm = getTile(i, j)
 		total_fields = countTilesAround(i, j, 2, function(t) return t.type == 'field' end)
-		if total_fields < 10 and math.random(1, 20) + farm.workers < 1 then
+		if total_fields < 10 and math.random(1, 20) - farm.workers < 1 then
 			local x = math.random(i-2, i+3)
 			local y = math.random(j-2, j+3)
 			local ftile = getTile(x, y)
@@ -106,7 +106,7 @@ update_funcs = {
 		local y = math.random(j-2, j+3)
 		local ftile = getTile(x, y)
 		local chimney = getTile(i, j)
-		if math.random(1, 20) + chimney.workers < 1 and ftile and (ftile.type == 'trees') then
+		if math.random(1, 20) - chimney.workers < 1 and ftile and (ftile.type == 'trees') then
 			ftile.type = 'grass'
 			resources.power = resources.power + 2
 		end
@@ -147,7 +147,9 @@ function love.update(dt)
 	yui.update({ui.top_bar, ui.main_view, ui.building_view})
 	ui.main_view:update(dt)
 	ui.top_info:update(dt)
-	ui.building_view:update(dt)
+	if building_selected then
+		ui.building_view:update(dt)
+	end
 end
 
 function iso2screen(i, j)
@@ -243,7 +245,8 @@ function love.draw()
 	ui.main_view:draw()
 	if building_selected then
 		ui.building_view:draw()
-		getAssignedWorkersLabel():setText('workers: '..building_selected.workers)
+		getAssignedWorkersLabel():setText(building_selected.workers)
+		getBuildingNameLabel():setText(building_selected.type)
 	end
 end
 
@@ -252,7 +255,7 @@ function love.mousepressed(x, y, k)
 	local tool = tools[current_tool]
 	iso.x = math.floor(iso.x)
 	iso.y = math.floor(iso.y)
-	if iso.x > 0 and iso.x < settings.MAP_SIZE and iso.y > 0 and iso.y < settings.MAP_SIZE then
+	if not building_selected and iso.x > 0 and iso.x < settings.MAP_SIZE and iso.y > 0 and iso.y < settings.MAP_SIZE then
 		if tool.canUse(iso.x, iso.y) then
 			tool.use(iso.x, iso.y)
 		else
