@@ -12,10 +12,10 @@ camera = {
 }
 
 resources = {
-	population = 1,
+	workers = 1,
+	used_workers = 0,
 	food = 10,
-	power = 0,
-	minerals = 0
+	power = 0
 }
 
 function createMap()
@@ -81,13 +81,17 @@ end
 
 update_funcs = {
 	['farm'] = function(i, j, dt)
+		local farm = getTile(i, j)
 		total_fields = countTilesAround(i, j, 2, function(t) return t.type == 'field' end)
-		if total_fields < 10 and math.random(1, 20) == 1 then
+		if total_fields < 10 and math.random(1, 20) + farm.workers < 1 then
 			local x = math.random(i-2, i+3)
 			local y = math.random(j-2, j+3)
 			local ftile = getTile(x, y)
 			if ftile and (ftile.type == 'grass' or ftile.type == 'trees') then
 				ftile.type = 'field'
+			elseif ftile and ftile.type == 'field' then
+				ftile.type = 'grass'
+				resources.food = resources.food + 3
 			end
 		end
 	end,
@@ -101,8 +105,15 @@ update_funcs = {
 		local x = math.random(i-2, i+3)
 		local y = math.random(j-2, j+3)
 		local ftile = getTile(x, y)
-		if ftile and (ftile.type == 'trees') then
+		local chimney = getTile(i, j)
+		if math.random(1, 20) + chimney.workers < 1 and ftile and (ftile.type == 'trees') then
 			ftile.type = 'grass'
+			resources.power = resources.power + 2
+		end
+	end,
+	['house'] = function(i, j, dt)
+		if math.random(1, 10) == 1 then
+			resources.food = resources.food - 1
 		end
 	end
 }
@@ -223,15 +234,16 @@ function love.draw()
 	getFPSLabel():setText(love.timer.getFPS()..' FPS')
 
 
-	local str=''
-	for k,v in pairs(resources) do
-		str = str..' | '..k..': '..v
-	end
-	
+	getResourceLabel('workers'):setText('workers: '..resources.workers - resources.used_workers..'/'..resources.workers)
+	getResourceLabel('power'):setText('power: '..resources.power)
+	getResourceLabel('food'):setText('food: '..resources.food)
+
+
 	ui.top_info:draw()
 	ui.main_view:draw()
 	if building_selected then
 		ui.building_view:draw()
+		getAssignedWorkersLabel():setText('workers: '..building_selected.workers)
 	end
 end
 

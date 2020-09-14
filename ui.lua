@@ -9,13 +9,21 @@ function loadUI()
 			default = love.graphics.newFont('resources/fonts/VCR_OSD_MONO_1.001.ttf', 24),
 		},
 		top_info = yui.View(0, 0, love.graphics.getWidth(), love.graphics.getHeight(),{
-			yui.Flow({
-				name = 'top_bar',
-				yui.Label({text = settings.VERSION}),
-				right = {
-					yui.Label({name = 'fps_label', text = 'FPS'}),
-				},
-			}),
+			yui.Stack({
+				yui.Flow({
+					name = 'top_bar',
+					yui.Label({text = settings.VERSION}),
+					right = {
+						yui.Label({name = 'fps_label', text = 'FPS'}),
+					},
+				}),
+				yui.Flow({
+					name = 'resources',
+					yui.Label({name='workers', text = 'workers: #####/#####'}),
+					yui.Label({name='food', text = 'food: #####/#####'}),
+					yui.Label({name='power', text = 'power: #####/#####'})
+				})
+			})
 		}),
 		main_view = yui.View(0, love.graphics.getHeight() - 40, love.graphics.getWidth(), 40, {
 			yui.Flow({
@@ -28,16 +36,23 @@ function loadUI()
 		}),
 		building_view = yui.View(love.graphics.getWidth() / 4, love.graphics.getHeight() / 4,
 		                         love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, {
-			yui.Flow({
-				yui.Label({name = 'title', text = 'Building name'}),
-				right = {
-					yui.ImageButton({
-						name = 'closeButton',
-						image = love.graphics.newImage('resources/gfx/button_close.png'),
-						onClick = function(button)
-							building_selected = false
-						end}),
-				}
+			yui.Stack({
+				yui.Flow({
+					name = 'window_header',
+					yui.Label({name = 'title', text = 'Building name'}),
+					right = {
+						yui.ImageButton({
+							name = 'closeButton',
+							image = love.graphics.newImage('resources/gfx/button_close.png'),
+							onClick = function(button)
+								building_selected = false
+							end}),
+					}
+				}),
+				yui.Stack({
+					name = 'window_body',
+					yui.Label({name = 'workers', text = 'workers: ####'})
+				})
 			}),
 			background = {0.5, 0.5, 0.25}
 		})
@@ -45,7 +60,15 @@ function loadUI()
 end
 
 function getFPSLabel()
-	return ui.top_info.top_bar.right[1]
+	return ui.top_info[1].top_bar.right[1]
+end
+
+function getResourceLabel(res)
+	return ui.top_info[1].resources[res]
+end
+
+function getAssignedWorkersLabel(res)
+	return ui.building_view[1].window_body.workers
 end
 
 function toolButton(name, img_name)
