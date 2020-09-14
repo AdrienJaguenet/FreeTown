@@ -12,7 +12,7 @@ function buildTool(name, onPlace)
 
 		end,
 		canUse = function(i, j)
-			return map[i][j].type == 'grass'
+			return map[i][j].type == 'grass' and resources.workers - resources.used_workers > 0
 		end
 	}
 end
@@ -26,7 +26,7 @@ tools = {
 	['farm'] = buildTool('farm', function(tile)
 		resources.used_workers = resources.used_workers - tile.workers
 		tile.workers = 1
-		resources.used_workers = resources.used_workers - 1
+		resources.used_workers = resources.used_workers + 1
 	end),
 	['info'] = {
 		hoverTile = 'tile_select',
@@ -40,4 +40,8 @@ tools = {
 		canUse = function() return true end
 	}
 }
+
+tools['house'].canUse = function(i, j)
+	return map[i][j].type == 'grass'
+end
 

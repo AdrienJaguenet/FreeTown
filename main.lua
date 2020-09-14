@@ -112,7 +112,7 @@ update_funcs = {
 		end
 	end,
 	['house'] = function(i, j, dt)
-		if math.random(1, 10) == 1 then
+		if math.random(1, 40) == 1 then
 			resources.food = resources.food - 1
 		end
 	end
