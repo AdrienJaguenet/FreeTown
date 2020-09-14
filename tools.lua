@@ -6,6 +6,7 @@ function buildTool(name, onPlace)
 		use = function(i, j)
 			local tile = map[i][j]
 			tile.type = name
+			sfx.build:play()
 			if onPlace then
 				onPlace(tile)
 			end

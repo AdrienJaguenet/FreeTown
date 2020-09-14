@@ -55,6 +55,9 @@ function love.load()
 	gfx = {
 		tiles = loadTiles()
 	}
+	sfx = {
+		build = love.audio.newSource('resources/sfx/build.wav', 'static')
+	}
 	loadUI()
 	createMap()
 end
