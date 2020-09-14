@@ -58,6 +58,7 @@ function love.load()
 	sfx = {
 		build = love.audio.newSource('resources/sfx/build.wav', 'static')
 	}
+	require('buildings')
 	loadUI()
 	createMap()
 end
@@ -69,65 +70,13 @@ function getTile(x, y)
 	end
 end
 
-function countTilesAround(i, j, radius, fn)
-	local acc = 0
-	for x=i-radius,i+radius do
-		for y=j-radius,j+radius do
-			local ftile = getTile(x, y)
-			if ftile and fn(ftile) then
-				acc = acc + 1
-			end
-		end
-	end
-	return acc
-end
-
-update_funcs = {
-	['farm'] = function(i, j, dt)
-		local farm = getTile(i, j)
-		total_fields = countTilesAround(i, j, 2, function(t) return t.type == 'field' end)
-		if total_fields < 10 and math.random(1, 20) - farm.workers < 1 then
-			local x = math.random(i-2, i+3)
-			local y = math.random(j-2, j+3)
-			local ftile = getTile(x, y)
-			if ftile and (ftile.type == 'grass' or ftile.type == 'trees') then
-				ftile.type = 'field'
-			elseif ftile and ftile.type == 'field' then
-				ftile.type = 'grass'
-				resources.food = resources.food + 3
-			end
-		end
-	end,
-	['grass'] = function(i, j, dt)
-		total_forest = countTilesAround(i, j, 2, function(t) return t.type == 'trees' end)
-		if math.random(1, 100000) < total_forest then
-			map[i][j].type = 'trees'
-		end
-	end,
-	['chimney'] = function(i, j, dt)
-		local x = math.random(i-2, i+3)
-		local y = math.random(j-2, j+3)
-		local ftile = getTile(x, y)
-		local chimney = getTile(i, j)
-		if math.random(1, 20) - chimney.workers < 1 and ftile and (ftile.type == 'trees') then
-			ftile.type = 'grass'
-			resources.power = resources.power + 2
-		end
-	end,
-	['house'] = function(i, j, dt)
-		if math.random(1, 40) == 1 then
-			resources.food = resources.food - 1
-		end
-	end
-}
-
 function love.update(dt)
 	for i=1,settings.MAP_SIZE do
 		for j=1,settings.MAP_SIZE do
 			local tile = map[i][j]
 			local total_fields = 0
-			if update_funcs[tile.type] then
-				update_funcs[tile.type](i, j, dt)
+			if tile.building then
+				tile.building:Update(dt)
 			end
 		end
 	end
@@ -214,7 +163,11 @@ function love.draw()
 				local x = settings.MAP_SIZE - i + j
 				local y = j
 				local tile = map[x][y]
-				drawIsoTile(x, y, tile, {layer = layer})
+				if tile.building then
+					tile.building:Draw(layer)
+				else
+					drawIsoTile(x, y, tile, {layer = layer})
+				end
 				if hover_coords.x == x and hover_coords.y == y then
 					-- draw the hover
 					drawTool(x, y, tool)
@@ -227,7 +180,11 @@ function love.draw()
 				local x = j
 				local y = settings.MAP_SIZE - i + j
 				local tile = map[x][y]
-				drawIsoTile(x, y, tile, {layer = layer})
+				if tile.building then
+					tile.building:Draw(layer)
+				else
+					drawIsoTile(x, y, tile, {layer = layer})
+				end
 				if hover_coords.x == x and hover_coords.y == y then
 					-- draw the hover
 					drawTool(x, y, tool)

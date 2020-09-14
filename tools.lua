@@ -1,15 +1,12 @@
 current_tool = 'info'
 
-function buildTool(name, onPlace)
+function buildTool(name)
 	return {
 		hoverTile = name,
 		use = function(i, j)
 			local tile = map[i][j]
-			tile.type = name
+			tile.building = Building:New(name, i, j)
 			sfx.build:play()
-			if onPlace then
-				onPlace(tile)
-			end
 
 		end,
 		canUse = function(i, j)
@@ -25,9 +22,6 @@ tools = {
 		resources.workers = resources.workers + 1
 	end),
 	['farm'] = buildTool('farm', function(tile)
-		resources.used_workers = resources.used_workers - tile.workers
-		tile.workers = 1
-		resources.used_workers = resources.used_workers + 1
 	end),
 	['info'] = {
 		hoverTile = 'tile_select',

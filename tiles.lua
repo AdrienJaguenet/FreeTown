@@ -109,7 +109,6 @@ Tile.__index = Tile
 function Tile:new(t)
 	local this = {
 		type = t,
-		workers = 0
 	}
 	setmetatable(this, Tile)
 	return this
