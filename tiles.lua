@@ -1,73 +1,66 @@
+terrain_tilemap = love.graphics.newImage('resources/gfx/terrain.png')
+
+function isoTile(tilemap, x, y)
+	return {
+		extra_height = 38,
+		tilemap = tilemap,
+		quad = love.graphics.newQuad((x-1) * 32, (y-1) * 64, 32, 64, tilemap:getDimensions())
+	}
+end
+
 function loadTiles()
 	return {
 		tile_select = {
 			layers = {
-				{
-					image = love.graphics.newImage('resources/gfx/gui/tile_select.png'),
-					extra_height = 0
-				}
+				isoTile(terrain_tilemap, 1, 1)
 			},
+		},
+		concrete = {
+			layers = {
+				isoTile(terrain_tilemap, 1, 2)
+			}
 		},
 		river = {
 			layers = {
 				{
 					oriented = {
-						['00'] = {
-							image = love.graphics.newImage('resources/gfx/water/river_0000.png'),
-							extra_height = 38
-						},
-						['01'] = {
-							image = love.graphics.newImage('resources/gfx/water/river_0011.png'),
-							extra_height = 38
-						},
-						['10'] = {
-							image = love.graphics.newImage('resources/gfx/water/river_1100.png'),
-							extra_height = 38
-						},
-						['11'] = {
-							image = love.graphics.newImage('resources/gfx/water/river_0000.png'),
-							extra_height = 38
-						}
+						['0000'] = isoTile(terrain_tilemap, 1, 4),
+						['0001'] = isoTile(terrain_tilemap, 1, 4),
+						['0010'] = isoTile(terrain_tilemap, 1, 4),
+						['0011'] = isoTile(terrain_tilemap, 1, 4),
+						['0100'] = isoTile(terrain_tilemap, 1, 4),
+						['0101'] = isoTile(terrain_tilemap, 1, 4),
+						['0110'] = isoTile(terrain_tilemap, 1, 4),
+						['0111'] = isoTile(terrain_tilemap, 1, 4),
+						['1100'] = isoTile(terrain_tilemap, 1, 4),
+						['1101'] = isoTile(terrain_tilemap, 1, 4),
+						['1110'] = isoTile(terrain_tilemap, 1, 4),
+						['1111'] = isoTile(terrain_tilemap, 1, 4),
 					}
 				}
 			}
 		},
 		grass = {
 			layers = {
-				{
-					image = love.graphics.newImage('resources/gfx/grass_tile.png'),
-					extra_height = 38
-				},
-				{
-					image = love.graphics.newImage('resources/gfx/nature/grass.png'),
-					extra_height = 38
-				},
+				isoTile(terrain_tilemap, 1, 2)
 			},
 		},
 		road = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/grass_tile.png'),
-					extra_height = 38
-				},
-				{
 					oriented = {
-						['00'] = {
-							image = love.graphics.newImage('resources/gfx/transport/road_1111.png'),
-							extra_height = 38
-						},
-						['01'] = {
-							image = love.graphics.newImage('resources/gfx/transport/road_0011.png'),
-							extra_height = 38
-						},
-						['10'] = {
-							image = love.graphics.newImage('resources/gfx/transport_1100.png'),
-							extra_height = 38
-						},
-						['11'] = {
-							image = love.graphics.newImage('resources/gfx/transport_1111.png'),
-							extra_height = 38
-						}
+						['0000'] = isoTile(terrain_tilemap, 1, 5),
+						['0001'] = isoTile(terrain_tilemap, 1, 5),
+						['0010'] = isoTile(terrain_tilemap, 1, 5),
+						['0011'] = isoTile(terrain_tilemap, 1, 5),
+						['0100'] = isoTile(terrain_tilemap, 1, 5),
+						['0101'] = isoTile(terrain_tilemap, 1, 5),
+						['0110'] = isoTile(terrain_tilemap, 1, 5),
+						['0111'] = isoTile(terrain_tilemap, 1, 5),
+						['1100'] = isoTile(terrain_tilemap, 1, 5),
+						['1101'] = isoTile(terrain_tilemap, 1, 5),
+						['1110'] = isoTile(terrain_tilemap, 1, 5),
+						['1111'] = isoTile(terrain_tilemap, 1, 5),
 					}
 				},
 			},
@@ -75,79 +68,25 @@ function loadTiles()
 		trees = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/grass_tile.png'),
-					extra_height = 38
-				},
-				{
 					variations = {
-						{
-							image = love.graphics.newImage('resources/gfx/nature/trees.png'),
-							extra_height = 38
-						},
-						{
-							image = love.graphics.newImage('resources/gfx/nature/trees_2.png'),
-							extra_height = 38
-						},
-						{
-							image = love.graphics.newImage('resources/gfx/nature/trees_3.png'),
-							extra_height = 38
-						},
-						{
-							image = love.graphics.newImage('resources/gfx/nature/trees_4.png'),
-							extra_height = 38
-						},
-					},
+						isoTile(terrain_tilemap, 2, 2),
+						isoTile(terrain_tilemap, 3, 2),
+						isoTile(terrain_tilemap, 4, 2),
+						isoTile(terrain_tilemap, 5, 2),
+					}
 				},
 			},
 		},
 		chimney = {
 			layers = {
-				{
-					image = love.graphics.newImage('resources/gfx/concrete_tile.png'),
-					extra_height = 38
-				},
-				{
-					image = love.graphics.newImage('resources/gfx/buildings/chimney.png'),
-					extra_height = 38
-				},
+				isoTile(terrain_tilemap, 3, 3),
 			},
 		},
 		house = {
 			layers = {
-				{
-					image = love.graphics.newImage('resources/gfx/concrete_tile.png'),
-					extra_height = 38
-				},
-				{
-					image = love.graphics.newImage('resources/gfx/buildings/house.png'),
-					extra_height = 38
-				},
+				isoTile(terrain_tilemap, 2, 3),
 			},
 		},
-		farm = {
-			layers = {
-				{
-					image = love.graphics.newImage('resources/gfx/field_tile.png'),
-					extra_height = 38
-				},
-				{
-					image = love.graphics.newImage('resources/gfx/buildings/farm.png'),
-					extra_height = 38
-				},
-			},
-		},
-		field = {
-			layers = {
-				{
-					image = love.graphics.newImage('resources/gfx/field_tile.png'),
-					extra_height = 38
-				},
-				{
-					image = love.graphics.newImage('resources/gfx/nature/wheat.png'),
-					extra_height = 38
-				},
-			},
-		}
 	}
 end
 
@@ -170,15 +109,27 @@ function Tile:getSprite(i, j, layer)
 		local south = getTile(i, j + 1)
 		local west = getTile(i - 1, j)
 		local east = getTile(i + 1, j)
+
 		local str = ''
-		if (west and west.type == self.type) or
-		   (east and east.type == self.type) then
+		if (west and west.type == self.type) then
 			str = str..'1'
 		else
 			str = str..'0'
 		end
-		if (north and north.type == self.type) or
-		   (south and south.type == self.type) then
+
+		if (east and east.type == self.type) then
+			str = str..'1'
+		else
+			str = str..'0'
+		end
+
+		if (north and north.type == self.type) then
+			str = str..'1'
+		else
+			str = str..'0'
+		end
+
+		if (south and south.type == self.type) then
 			str = str..'1'
 		else
 			str = str..'0'
@@ -202,7 +153,7 @@ function Tile:draw(i, j, settings)
 	draw_origin.y = draw_origin.y - sprite.extra_height
 	local c1, c2, c3 = love.graphics.getColor()
 	love.graphics.setColor(color[1], color[2], color[3])
-	love.graphics.draw(sprite.image, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
+	love.graphics.draw(sprite.tilemap, sprite.quad, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
 		0, camera.zoom, camera.zoom)
 	love.graphics.setColor(c1, c2, c3)
 end

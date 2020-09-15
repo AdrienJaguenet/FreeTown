@@ -1,4 +1,4 @@
-local button_bg = love.graphics.newImage('resources/gfx/button.png')
+local button_bg = love.graphics.newImage('resources/gfx/gui/button.png')
 
 
 function loadUI()
@@ -30,12 +30,11 @@ function loadUI()
 		}),
 		main_view = yui.View(0, love.graphics.getHeight() - 40, love.graphics.getWidth(), 40, {
 			yui.Flow({
-				toolButton('info', 'info'),
-				toolButton('road', 'road_horizontal'),
-				toolButton('farm', 'farm'),
-				toolButton('chimney', 'chimney'),
-				toolButton('house', 'house'),
-				toolButton('destroy', 'destroy')
+				toolButton('info'),
+				toolButton('road'),
+				toolButton('chimney'),
+				toolButton('house'),
+				toolButton('destroy'), 
 			})
 		}),
 		building_view = yui.View(love.graphics.getWidth() / 4, love.graphics.getHeight() / 4,
@@ -47,7 +46,7 @@ function loadUI()
 					right = {
 						yui.ImageButton({
 							name = 'closeButton',
-							image = love.graphics.newImage('resources/gfx/button_close.png'),
+							image = love.graphics.newImage('resources/gfx/gui/button_close.png'),
 							onClick = function(button)
 								building_selected = nil 
 							end}),
@@ -103,9 +102,10 @@ function getDateLabel()
 	return ui.top_info[1].top_bar.date
 end
 
-function toolButton(name, img_name)
+function toolButton(name)
 	local canvas = love.graphics.newCanvas(button_bg:getWidth(), button_bg:getHeight())
-	local img = love.graphics.newImage('resources/gfx/'..img_name..'.png')
+	local img = love.graphics.newImage('resources/gfx/gui/'..name..'.png')
+	
 	love.graphics.setCanvas(canvas)
 	love.graphics.draw(button_bg)
 	love.graphics.draw(img, (button_bg:getWidth() - img:getWidth()) / 2, (button_bg:getHeight() - 38 - img:getHeight()) / 2)

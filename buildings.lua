@@ -48,10 +48,11 @@ end
 
 function Building:Draw(layer)
 	local draw_origin = iso2screen(self.x, self.y)
-	local layer = layer or #self.proto.gfx
+	local layer = layer or #self.proto.gfx.layers
 	local sprite = self.proto.gfx.layers[layer]
+	if not sprite then return end
 	draw_origin.y = draw_origin.y - sprite.extra_height
-	love.graphics.draw(sprite.image, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
+	love.graphics.draw(sprite.tilemap, sprite.quad, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
 		0, camera.zoom, camera.zoom)
 end
 

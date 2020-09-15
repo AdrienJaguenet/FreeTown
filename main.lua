@@ -47,13 +47,13 @@ function createMap()
 end
 
 function love.load()
+	love.graphics.setDefaultFilter('nearest')
 	require('tiles')
 	require('ui')
 	require('tools')
 	love.window.setMode(640, 480)
 	love.window.setTitle('FreeTown')
 	love.window.setFullscreen(true)
-	love.graphics.setDefaultFilter('nearest')
 	gfx = {
 		tiles = loadTiles()
 	}
