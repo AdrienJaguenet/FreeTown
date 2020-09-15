@@ -1,8 +1,13 @@
 local button_bg = love.graphics.newImage('resources/gfx/button.png')
 
-yui.debug_draw = true
 
 function loadUI()
+	yui = require('libs.yaoui.yaoui')
+	yui.debug_draw = true
+	yui.Theme.open_sans_regular = 'resources/fonts/propaganda.ttf'
+	yui.Theme.open_sans_light = 'resources/fonts/propaganda.ttf'
+	yui.Theme.open_sans_bold = 'resources/fonts/propaganda.ttf'
+	yui.Theme.open_sans_semibold = 'resources/fonts/propaganda.ttf'
 	yui.UI.registerEvents()
 	ui = {
 		top_info = yui.View(0, 0, love.graphics.getWidth(), love.graphics.getHeight(),{

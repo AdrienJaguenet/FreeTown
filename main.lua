@@ -47,7 +47,6 @@ function createMap()
 end
 
 function love.load()
-	yui = require('libs.yaoui.yaoui')
 	require('tiles')
 	require('ui')
 	require('tools')
@@ -193,7 +192,7 @@ function love.draw()
 	end
 
 	getFPSLabel():setText(love.timer.getFPS()..' FPS')
-	getDateLabel():setText(os.date("%d.%m.%Y\u{0433}", date))
+	getDateLabel():setText(os.date("%d.%m.%Y", date))
 
 
 	getResourceLabel('workers'):setText('workers: '..resources.workers - resources.used_workers..'/'..resources.workers)
