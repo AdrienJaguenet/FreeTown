@@ -79,8 +79,24 @@ function loadTiles()
 					extra_height = 38
 				},
 				{
-					image = love.graphics.newImage('resources/gfx/trees.png'),
-					extra_height = 38
+					variations = {
+						{
+							image = love.graphics.newImage('resources/gfx/trees.png'),
+							extra_height = 38
+						},
+						{
+							image = love.graphics.newImage('resources/gfx/trees_2.png'),
+							extra_height = 38
+						},
+						{
+							image = love.graphics.newImage('resources/gfx/trees_3.png'),
+							extra_height = 38
+						},
+						{
+							image = love.graphics.newImage('resources/gfx/trees_4.png'),
+							extra_height = 38
+						},
+					},
 				},
 			},
 		},
@@ -141,6 +157,7 @@ Tile.__index = Tile
 function Tile:new(t)
 	local this = {
 		type = t,
+		variation = math.random(100)
 	}
 	setmetatable(this, Tile)
 	return this
@@ -167,6 +184,8 @@ function Tile:getSprite(i, j, layer)
 			str = str..'0'
 		end
 		return obj.oriented[str]
+	elseif obj and obj.variations then
+		return obj.variations[math.floor(self.variation % #obj.variations) + 1]
 	else
 		return obj
 	end

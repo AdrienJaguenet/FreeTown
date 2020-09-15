@@ -206,7 +206,7 @@ function love.draw()
 	if building_selected then
 		ui.building_view:draw()
 		getAssignedWorkersLabel():setText(building_selected.workers)
-		getBuildingNameLabel():setText(building_selected.type)
+		getBuildingNameLabel():setText(building_selected.proto.name)
 	end
 end
 

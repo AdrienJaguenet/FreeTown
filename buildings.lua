@@ -60,6 +60,10 @@ function Building:Update(dt)
 	return self.proto.OnUpdate(self, dt)
 end
 
+function Building:Destroy()
+	return self.proto.OnDestroy(self)
+end
+
 function register_protobuilding(name, def)
 	local proto = {
 		name = name,
@@ -67,6 +71,9 @@ function register_protobuilding(name, def)
 		OnUpdate = def.OnUpdate or function(building, dt)
 		end,
 		OnCreate = def.OnCreate or function(building)
+		end,
+		OnDestroy = def.OnDestroy or function(building)
+			resources.used_workers = resources.used_workers - building.workers
 		end
 	}
 	Building.protos[name] = proto
@@ -109,6 +116,9 @@ register_protobuilding('house', {
 			return
 		end
 		resources.food = resources.food - 1
+	end,
+	OnDestroy = function(building)
+		resources.workers = resources.workers - 1
 	end
 })
 

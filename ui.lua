@@ -32,7 +32,8 @@ function loadUI()
 				toolButton('road', 'road_horizontal'),
 				toolButton('farm', 'farm'),
 				toolButton('chimney', 'chimney'),
-				toolButton('house', 'house')
+				toolButton('house', 'house'),
+				toolButton('destroy', 'destroy')
 			})
 		}),
 		building_view = yui.View(love.graphics.getWidth() / 4, love.graphics.getHeight() / 4,

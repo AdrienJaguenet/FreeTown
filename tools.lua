@@ -26,14 +26,28 @@ tools = {
 	['info'] = {
 		hoverTile = 'tile_select',
 		use = function(i, j) 
-			if map[i][j].type == 'farm' then
-				building_selected = map[i][j]
+			if map[i][j].building then
+				building_selected = map[i][j].building
 			else
 				building_selected = nil
 			end
 		end,
 		canUse = function() return true end
-	}
+	},
+	['destroy'] = {
+		hoverTile = 'tile_select',
+		use = function(i, j)
+			if map[i][j].building then
+				map[i][j].building:Destroy()
+				map[i][j].building = nil
+			elseif map[i][j].type ~= 'grass' then
+				map[i][j].type = 'grass'
+			end
+		end,
+		canUse = function(i, j)
+			return true
+		end
+	},
 }
 
 tools['house'].canUse = function(i, j)
