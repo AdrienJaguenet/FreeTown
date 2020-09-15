@@ -35,8 +35,20 @@ function loadTiles()
 					extra_height = 38
 				},
 				{
-					image = love.graphics.newImage('resources/gfx/road_horizontal.png'),
-					extra_height = 38
+					oriented = {
+						['00'] = {
+							image = love.graphics.newImage('resources/gfx/road_crossing.png'),
+							extra_height = 38
+						},
+						['01'] = {
+							image = love.graphics.newImage('resources/gfx/road_horizontal.png'),
+							extra_height = 38
+						},
+						['10'] = {
+							image = love.graphics.newImage('resources/gfx/road_vertical.png'),
+							extra_height = 38
+						}
+					}
 				},
 			},
 		},
@@ -116,5 +128,21 @@ end
 
 function Tile:getSprite(layer)
 	return gfx.tiles[self.type].layers[layer]
+end
+
+function Tile:draw(i, j, settings)
+	local layer = settings.layer or #gfx.tiles[self.type].layers
+	local color = settings.color or {1, 1, 1}
+	local sprite = self:getSprite(layer)
+	if not sprite then
+		return
+	end
+	local draw_origin = iso2screen(i, j)
+	draw_origin.y = draw_origin.y - sprite.extra_height
+	local c1, c2, c3 = love.graphics.getColor()
+	love.graphics.setColor(color[1], color[2], color[3])
+	love.graphics.draw(sprite.image, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
+		0, camera.zoom, camera.zoom)
+	love.graphics.setColor(c1, c2, c3)
 end
 

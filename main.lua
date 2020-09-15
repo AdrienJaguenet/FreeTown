@@ -138,22 +138,6 @@ function screen2iso(cx, cy)
 	}
 end
 
-function drawIsoTile(i, j, tile, settings)
-	local layer = settings.layer or #gfx.tiles[tile.type].layers
-	local color = settings.color or {1, 1, 1}
-	local sprite = tile:getSprite(layer)
-	if not sprite then
-		return
-	end
-	local draw_origin = iso2screen(i, j)
-	draw_origin.y = draw_origin.y - sprite.extra_height
-	local c1, c2, c3 = love.graphics.getColor()
-	love.graphics.setColor(color[1], color[2], color[3])
-	love.graphics.draw(sprite.image, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
-		0, camera.zoom, camera.zoom)
-	love.graphics.setColor(c1, c2, c3)
-end
-
 function drawTool(i, j, tool)
 	local color = {}
 	if tool.canUse(i, j) then
@@ -161,7 +145,7 @@ function drawTool(i, j, tool)
 	else
 		color = {.75, .25, .25}
 	end
-	drawIsoTile(i, j, Tile:new(tool.hoverTile), {color = color})
+	Tile:new(tool.hoverTile):draw(i, j, {color = color})
 end
 
 function love.draw()
@@ -181,7 +165,7 @@ function love.draw()
 				if tile.building then
 					tile.building:Draw(layer)
 				else
-					drawIsoTile(x, y, tile, {layer = layer})
+					tile:draw(x, y, {layer = layer})
 				end
 				if hover_coords.x == x and hover_coords.y == y then
 					-- draw the hover
@@ -198,7 +182,7 @@ function love.draw()
 				if tile.building then
 					tile.building:Draw(layer)
 				else
-					drawIsoTile(x, y, tile, {layer = layer})
+					tile:draw(x, y, {layer = layer})
 				end
 				if hover_coords.x == x and hover_coords.y == y then
 					-- draw the hover
