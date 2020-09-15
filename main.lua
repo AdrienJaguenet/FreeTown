@@ -18,6 +18,9 @@ resources = {
 	power = 0
 }
 
+date = os.time{year = 1953, month = 3, day = 5}
+date_accu = 0
+
 function createMap()
 	map = {}
 	for i=1,settings.MAP_SIZE do
@@ -56,7 +59,8 @@ function love.load()
 		tiles = loadTiles()
 	}
 	sfx = {
-		build = love.audio.newSource('resources/sfx/build.wav', 'static')
+		build = love.audio.newSource('resources/sfx/build.wav', 'static'),
+		err = love.audio.newSource('resources/sfx/error.wav', 'static')
 	}
 	require('buildings')
 	loadUI()
@@ -70,7 +74,18 @@ function getTile(x, y)
 	end
 end
 
+function updateDate(dt)
+	date_accu = dt + date_accu
+	while date_accu > .5 do 
+		date_accu = date_accu - .5
+		local dateTable = os.date('*t', date)
+		dateTable.day = dateTable.day + 1
+		date = os.time(dateTable)
+	end
+end
+
 function love.update(dt)
+	updateDate(dt)
 	for i=1,settings.MAP_SIZE do
 		for j=1,settings.MAP_SIZE do
 			local tile = map[i][j]
@@ -194,6 +209,7 @@ function love.draw()
 	end
 
 	getFPSLabel():setText(love.timer.getFPS()..' FPS')
+	getDateLabel():setText(os.date("%d.%m.%Y\u{0433}", date))
 
 
 	getResourceLabel('workers'):setText('workers: '..resources.workers - resources.used_workers..'/'..resources.workers)
@@ -219,6 +235,8 @@ function love.mousepressed(x, y, k)
 		if tool.canUse(iso.x, iso.y) then
 			tool.use(iso.x, iso.y)
 		else
+			sfx.err:stop()
+			sfx.err:play()
 		end
 	end
 

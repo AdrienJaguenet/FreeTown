@@ -13,8 +13,9 @@ function loadUI()
 				yui.Flow({
 					name = 'top_bar',
 					yui.Label({text = settings.VERSION}),
+					yui.Label({name = 'date', text = '##/##/####'}),
 					right = {
-						yui.Label({name = 'fps_label', text = 'FPS'}),
+						yui.Label({name = 'fps_label', text = '### FPS'}),
 					},
 				}),
 				yui.Flow({
@@ -93,6 +94,10 @@ end
 
 function getBuildingNameLabel()
 	return ui.building_view[1].window_header.title
+end
+
+function getDateLabel()
+	return ui.top_info[1].top_bar.date
 end
 
 function toolButton(name, img_name)
