@@ -3,29 +3,29 @@ function loadTiles()
 		tile_select = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/tile-select.png'),
+					image = love.graphics.newImage('resources/gfx/gui/tile_select.png'),
 					extra_height = 0
 				}
 			},
 		},
-		water = {
+		river = {
 			layers = {
 				{
 					oriented = {
 						['00'] = {
-							image = love.graphics.newImage('resources/gfx/water.png'),
+							image = love.graphics.newImage('resources/gfx/water/river_0000.png'),
 							extra_height = 38
 						},
 						['01'] = {
-							image = love.graphics.newImage('resources/gfx/water_horizontal.png'),
+							image = love.graphics.newImage('resources/gfx/water/river_0011.png'),
 							extra_height = 38
 						},
 						['10'] = {
-							image = love.graphics.newImage('resources/gfx/water_vertical.png'),
+							image = love.graphics.newImage('resources/gfx/water/river_1100.png'),
 							extra_height = 38
 						},
 						['11'] = {
-							image = love.graphics.newImage('resources/gfx/water.png'),
+							image = love.graphics.newImage('resources/gfx/water/river_0000.png'),
 							extra_height = 38
 						}
 					}
@@ -35,11 +35,11 @@ function loadTiles()
 		grass = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/grass_background.png'),
+					image = love.graphics.newImage('resources/gfx/grass_tile.png'),
 					extra_height = 38
 				},
 				{
-					image = love.graphics.newImage('resources/gfx/grass_foreground.png'),
+					image = love.graphics.newImage('resources/gfx/nature/grass.png'),
 					extra_height = 38
 				},
 			},
@@ -47,25 +47,25 @@ function loadTiles()
 		road = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/grass_background.png'),
+					image = love.graphics.newImage('resources/gfx/grass_tile.png'),
 					extra_height = 38
 				},
 				{
 					oriented = {
 						['00'] = {
-							image = love.graphics.newImage('resources/gfx/road_crossing.png'),
+							image = love.graphics.newImage('resources/gfx/transport/road_1111.png'),
 							extra_height = 38
 						},
 						['01'] = {
-							image = love.graphics.newImage('resources/gfx/road_horizontal.png'),
+							image = love.graphics.newImage('resources/gfx/transport/road_0011.png'),
 							extra_height = 38
 						},
 						['10'] = {
-							image = love.graphics.newImage('resources/gfx/road_vertical.png'),
+							image = love.graphics.newImage('resources/gfx/transport_1100.png'),
 							extra_height = 38
 						},
 						['11'] = {
-							image = love.graphics.newImage('resources/gfx/road_crossing.png'),
+							image = love.graphics.newImage('resources/gfx/transport_1111.png'),
 							extra_height = 38
 						}
 					}
@@ -75,25 +75,25 @@ function loadTiles()
 		trees = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/grass_background.png'),
+					image = love.graphics.newImage('resources/gfx/grass_tile.png'),
 					extra_height = 38
 				},
 				{
 					variations = {
 						{
-							image = love.graphics.newImage('resources/gfx/trees.png'),
+							image = love.graphics.newImage('resources/gfx/nature/trees.png'),
 							extra_height = 38
 						},
 						{
-							image = love.graphics.newImage('resources/gfx/trees_2.png'),
+							image = love.graphics.newImage('resources/gfx/nature/trees_2.png'),
 							extra_height = 38
 						},
 						{
-							image = love.graphics.newImage('resources/gfx/trees_3.png'),
+							image = love.graphics.newImage('resources/gfx/nature/trees_3.png'),
 							extra_height = 38
 						},
 						{
-							image = love.graphics.newImage('resources/gfx/trees_4.png'),
+							image = love.graphics.newImage('resources/gfx/nature/trees_4.png'),
 							extra_height = 38
 						},
 					},
@@ -103,11 +103,11 @@ function loadTiles()
 		chimney = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/concrete_background.png'),
+					image = love.graphics.newImage('resources/gfx/concrete_tile.png'),
 					extra_height = 38
 				},
 				{
-					image = love.graphics.newImage('resources/gfx/chimney.png'),
+					image = love.graphics.newImage('resources/gfx/buildings/chimney.png'),
 					extra_height = 38
 				},
 			},
@@ -115,11 +115,11 @@ function loadTiles()
 		house = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/concrete_background.png'),
+					image = love.graphics.newImage('resources/gfx/concrete_tile.png'),
 					extra_height = 38
 				},
 				{
-					image = love.graphics.newImage('resources/gfx/house.png'),
+					image = love.graphics.newImage('resources/gfx/buildings/house.png'),
 					extra_height = 38
 				},
 			},
@@ -127,11 +127,11 @@ function loadTiles()
 		farm = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/concrete_background.png'),
+					image = love.graphics.newImage('resources/gfx/field_tile.png'),
 					extra_height = 38
 				},
 				{
-					image = love.graphics.newImage('resources/gfx/farm.png'),
+					image = love.graphics.newImage('resources/gfx/buildings/farm.png'),
 					extra_height = 38
 				},
 			},
@@ -139,11 +139,11 @@ function loadTiles()
 		field = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/field_background.png'),
+					image = love.graphics.newImage('resources/gfx/field_tile.png'),
 					extra_height = 38
 				},
 				{
-					image = love.graphics.newImage('resources/gfx/field_wheat.png'),
+					image = love.graphics.newImage('resources/gfx/nature/wheat.png'),
 					extra_height = 38
 				},
 			},
