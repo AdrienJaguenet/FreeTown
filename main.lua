@@ -64,6 +64,7 @@ function love.load()
 	require('buildings')
 	loadUI()
 	createMap()
+	love.mouse.setGrabbed(true)
 end
 
 function getTile(x, y)
@@ -115,6 +116,11 @@ function love.update(dt)
 	ui.top_info:update(dt)
 	if building_selected then
 		ui.building_view:update(dt)
+	end
+	
+	-- quit when ctrl + q pressed
+	if love.keyboard.isDown('lctrl') and love.keyboard.isDown('q') then
+		love.event.quit();
 	end
 end
 
