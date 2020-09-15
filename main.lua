@@ -246,6 +246,9 @@ function love.mousereleased(x, y, k)
 end
 
 function love.keyreleased(k)
+	if k == 'escape' then
+		current_tool = 'info'
+	end
 end
 
 function love.keypressed(k)
