@@ -47,6 +47,10 @@ function loadTiles()
 						['10'] = {
 							image = love.graphics.newImage('resources/gfx/road_vertical.png'),
 							extra_height = 38
+						},
+						['11'] = {
+							image = love.graphics.newImage('resources/gfx/road_crossing.png'),
+							extra_height = 38
 						}
 					}
 				},
@@ -126,14 +130,36 @@ function Tile:new(t)
 	return this
 end
 
-function Tile:getSprite(layer)
-	return gfx.tiles[self.type].layers[layer]
+function Tile:getSprite(i, j, layer)
+	local obj = gfx.tiles[self.type].layers[layer]
+	if obj and obj.oriented then
+		local north = getTile(i, j - 1)
+		local south = getTile(i, j + 1)
+		local west = getTile(i - 1, j)
+		local east = getTile(i + 1, j)
+		local str = ''
+		if (west and west.type == self.type) or
+		   (east and east.type == self.type) then
+			str = str..'1'
+		else
+			str = str..'0'
+		end
+		if (north and north.type == self.type) or
+		   (south and south.type == self.type) then
+			str = str..'1'
+		else
+			str = str..'0'
+		end
+		return obj.oriented[str]
+	else
+		return obj
+	end
 end
 
 function Tile:draw(i, j, settings)
 	local layer = settings.layer or #gfx.tiles[self.type].layers
 	local color = settings.color or {1, 1, 1}
-	local sprite = self:getSprite(layer)
+	local sprite = self:getSprite(i, j, layer)
 	if not sprite then
 		return
 	end

@@ -10,7 +10,7 @@ function buildTool(name)
 
 		end,
 		canUse = function(i, j)
-			return map[i][j].type == 'grass' and resources.workers - resources.used_workers > 0
+			return map[i][j].type == 'grass' or map[i][j].type == 'trees' and resources.workers - resources.used_workers > 0
 		end
 	}
 end
@@ -38,5 +38,11 @@ tools = {
 
 tools['house'].canUse = function(i, j)
 	return map[i][j].type == 'grass'
+end
+
+tools['road'].use = function(i, j)
+	local tile = map[i][j]
+	tile.type = 'road'
+	sfx.build:play()
 end
 
