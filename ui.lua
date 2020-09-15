@@ -5,9 +5,6 @@ yui.debug_draw = true
 function loadUI()
 	yui.UI.registerEvents()
 	ui = {
-		fonts = {
-			default = love.graphics.newFont('resources/fonts/VCR_OSD_MONO_1.001.ttf', 24),
-		},
 		top_info = yui.View(0, 0, love.graphics.getWidth(), love.graphics.getHeight(),{
 			yui.Stack({
 				yui.Flow({
