@@ -11,8 +11,24 @@ function loadTiles()
 		water = {
 			layers = {
 				{
-					image = love.graphics.newImage('resources/gfx/water.png'),
-					extra_height = 38
+					oriented = {
+						['00'] = {
+							image = love.graphics.newImage('resources/gfx/water.png'),
+							extra_height = 38
+						},
+						['01'] = {
+							image = love.graphics.newImage('resources/gfx/water_horizontal.png'),
+							extra_height = 38
+						},
+						['10'] = {
+							image = love.graphics.newImage('resources/gfx/water_vertical.png'),
+							extra_height = 38
+						},
+						['11'] = {
+							image = love.graphics.newImage('resources/gfx/water.png'),
+							extra_height = 38
+						}
+					}
 				}
 			}
 		},
