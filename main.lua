@@ -139,12 +139,17 @@ function love.draw()
 
 	-- DEBUG INFO
 	if settings.DEBUG then
+		local tileAtCoords = map:GetTile(hover_coords.x, hover_coords.y)
+		if tileAtCoords == nil then
+			tileAtCoords = {type = "void"}
+		end
 		local debugText = love.graphics.newText(love.graphics.getFont(),
 			'DEBUG INFO:\n'
 			..'\nCamera position: x:'..math.floor(camera.x*100)/100 .. ', y:' ..math.floor(camera.y*100)/100
 			..'\nCamera zoom: ' ..camera.zoom
 			..'\nMouse screen position: x:' ..love.mouse.getX() .. ', y:' ..love.mouse.getY()
 			..'\nMouse to ISO: x: ' ..hover_coords.x ..', y: ' ..hover_coords.y
+			..'\nTile at coords: ' ..tileAtCoords.type
 		)
 		local width, height = debugText:getDimensions()
 		love.graphics.setColor(0,0,0,0.5)
@@ -165,7 +170,7 @@ function love.mousepressed(x, y, k)
 		else
 			sfx.err:stop()
 			sfx.err:play()
-			camera.shake(5)
+			camera.shake(2)
 		end
 	end
 
