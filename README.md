@@ -2,7 +2,7 @@
 
 *Destroy nature and expand civilization*
 
-(C) 2020 Adrien JAGUENET & Emil KOSZ
+(C) 2020 Adrien JAGUENET, Emil KOSZ & Jakub KOPAŃKO
 
 ### How do I run this game?
 
