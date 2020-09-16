@@ -13,7 +13,8 @@ function buildTool(name)
 			local tile = getTile(i, j)
 			return (tile.type == 'grass' or tile.type == 'trees') -- check terrain type
 			   and (resources.workers - resources.used_workers > 0) -- enough workers
-			   and isAdjacentTo(i, j, function(t) return t.type == 'road' end)
+			   and isAdjacentTo(i, j, function(t) return t.type == 'road' end) -- must be next to a road
+			   and not tile.building -- cannot build over an existing building
 		end
 	}
 end
