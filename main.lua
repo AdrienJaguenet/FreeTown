@@ -3,7 +3,8 @@ settings = {
 	CAMERA_SPEED = 500,
 	ISOTILE_HEIGHT = 20,
 	ISOTILE_WIDTH = 32,
-	VERSION = '0.0.1-afarensis'
+	VERSION = '0.0.1-afarensis',
+	DEBUG = true
 }
 camera = {
 	x = 0,
@@ -210,6 +211,22 @@ function love.draw()
 		ui.building_view:draw()
 		getAssignedWorkersLabel():setText(building_selected.workers)
 		getBuildingNameLabel():setText(building_selected.proto.name)
+	end
+
+	-- DEBUG INFO
+	if settings.DEBUG then
+		local debugText = love.graphics.newText(love.graphics.getFont(),
+			'DEBUG INFO:\n'
+			..'\nCamera position: x:'..math.floor(camera.x*100)/100 .. ', y:' ..math.floor(camera.y*100)/100
+			..'\nCamera zoom: ' ..camera.zoom
+			..'\nMouse screen position: x:' ..love.mouse.getX() .. ', y:' ..love.mouse.getY()
+			..'\nMouse to ISO: x: ' ..hover_coords.x ..', y: ' ..hover_coords.y
+		)
+		local width, height = debugText:getDimensions()
+		love.graphics.setColor(0,0,0,0.5)
+		love.graphics.rectangle("fill", 5, 75, width + 10, height + 10)
+		love.graphics.setColor(1,1,1,1)
+		love.graphics.draw(debugText, 10, 80)
 	end
 end
 
