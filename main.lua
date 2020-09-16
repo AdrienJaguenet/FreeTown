@@ -27,7 +27,7 @@ function createMap()
 		map[i] = {}
 		for j=1,settings.MAP_SIZE do
 			local t = 'grass'
-			if math.random(1,3) == 1 then
+			if math.random(1,5) < 4 then
 				t = 'trees'
 			end
 			map[i][j] = Tile:new(t)
