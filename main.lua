@@ -12,7 +12,7 @@ camera = require('camera')
 resources = {
 	workers = 1,
 	used_workers = 0,
-	food = 10,
+	food = 1000,
 	power = 0
 }
 
@@ -70,6 +70,23 @@ function getTile(x, y)
 	if row then
 		return map[x][y]
 	end
+end
+
+function getMooreNeighbourhood(x, y) -- returns {N, S, W, E}
+	return
+		getTile(x, y - 1), -- N
+		getTile(x, y + 1), -- S
+		getTile(x - 1, y), -- W
+		getTile(x - 1, y) -- E
+end
+
+-- tells whether a tile is adjacent to another tile that follows an arbitrary criterion
+function isAdjacentTo(x, y, fn) 
+	local north, south, east, west = getMooreNeighbourhood(x, y)
+	return (north and fn(north)) or
+	       (south and fn(south)) or
+		   (west and fn(west)) or
+		   (east and fn(east))
 end
 
 function updateDate(dt)

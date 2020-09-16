@@ -10,7 +10,10 @@ function buildTool(name)
 
 		end,
 		canUse = function(i, j)
-			return map[i][j].type == 'grass' or map[i][j].type == 'trees' and resources.workers - resources.used_workers > 0
+			local tile = getTile(i, j)
+			return (tile.type == 'grass' or tile.type == 'trees') -- check terrain type
+			   and (resources.workers - resources.used_workers > 0) -- enough workers
+			   and isAdjacentTo(i, j, function(t) return t.type == 'road' end)
 		end
 	}
 end
@@ -48,13 +51,14 @@ tools = {
 	},
 }
 
-tools['house'].canUse = function(i, j)
-	return map[i][j].type == 'grass'
-end
-
 tools['road'].use = function(i, j)
 	local tile = map[i][j]
 	tile.type = 'road'
 	sfx.build:play()
+end
+
+tools['road'].canUse = function(i, j)
+	local tile = getTile(i, j)
+	return (tile.type == 'grass' or tile.type == 'trees') -- check terrain type
 end
 
