@@ -154,7 +154,7 @@ function Tile:draw(i, j, settings)
 	if not sprite then
 		return
 	end
-	local draw_origin = iso2screen(i, j)
+	local draw_origin = utils.iso2screen(i, j)
 	draw_origin.y = draw_origin.y - sprite.extra_height
 	local c1, c2, c3 = love.graphics.getColor()
 	love.graphics.setColor(color[1], color[2], color[3])

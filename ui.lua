@@ -1,7 +1,34 @@
+local ui = {}
+
 local button_bg = love.graphics.newImage('resources/gfx/gui/button.png')
 
+function ui.draw()
+	ui.getFPSLabel():setText(love.timer.getFPS()..' FPS')
+	ui.getDateLabel():setText(os.date("%d.%m.%Y", date))
+	ui.getResourceLabel('workers'):setText('workers: '..resources.workers - resources.used_workers..'/'..resources.workers)
+	ui.getResourceLabel('power'):setText('power: '..resources.power)
+	ui.getResourceLabel('food'):setText('food: '..resources.food)
 
-function loadUI()
+	ui.views.top_info:draw()
+	ui.views.main_view:draw()
+
+	if building_selected then
+		ui.views.building_view:draw()
+		ui.getAssignedWorkersLabel():setText(building_selected.workers)
+		ui.getBuildingNameLabel():setText(building_selected.proto.name)
+	end
+end
+
+function ui.update(dt)
+	yui.update({ui.top_bar, ui.main_view, ui.building_view})
+	ui.views.main_view:update(dt)
+	ui.views.top_info:update(dt)
+	if building_selected then
+		ui.views.building_view:update(dt)
+	end
+end
+
+function ui.initialize()
 	yui = require('libs.yaoui.yaoui')
 	yui.debug_draw = true
 	yui.Theme.open_sans_regular = 'resources/fonts/propaganda.ttf'
@@ -9,7 +36,7 @@ function loadUI()
 	yui.Theme.open_sans_bold = 'resources/fonts/propaganda.ttf'
 	yui.Theme.open_sans_semibold = 'resources/fonts/propaganda.ttf'
 	yui.UI.registerEvents()
-	ui = {
+	ui.views = {
 		top_info = yui.View(0, 0, love.graphics.getWidth(), love.graphics.getHeight(),{
 			yui.Stack({
 				yui.Flow({
@@ -30,11 +57,11 @@ function loadUI()
 		}),
 		main_view = yui.View(0, love.graphics.getHeight() - 40, love.graphics.getWidth(), 40, {
 			yui.Flow({
-				toolButton('info'),
-				toolButton('road'),
-				toolButton('chimney'),
-				toolButton('house'),
-				toolButton('destroy'), 
+				ui.toolButton('info'),
+				ui.toolButton('road'),
+				ui.toolButton('chimney'),
+				ui.toolButton('house'),
+				ui.toolButton('destroy'), 
 			})
 		}),
 		building_view = yui.View(love.graphics.getWidth() / 4, love.graphics.getHeight() / 4,
@@ -54,7 +81,7 @@ function loadUI()
 				}),
 				yui.Stack({
 					name = 'window_body',
-					NumericField('workers')
+					ui.NumericField('workers')
 				})
 			}),
 			background = {0.5, 0.5, 0.25}
@@ -62,7 +89,7 @@ function loadUI()
 	}
 end
 
-function NumericField(name)
+function ui.NumericField(name)
 	return yui.Flow({
 		name = name,
 		yui.Label({text = name..': '}),
@@ -82,27 +109,27 @@ function NumericField(name)
 	})
 end
 
-function getFPSLabel()
-	return ui.top_info[1].top_bar.right[1]
+function ui.getFPSLabel()
+	return ui.views.top_info[1].top_bar.right[1]
 end
 
-function getResourceLabel(res)
-	return ui.top_info[1].resources[res]
+function ui.getResourceLabel(res)
+	return ui.views.top_info[1].resources[res]
 end
 
-function getAssignedWorkersLabel(res)
-	return ui.building_view[1].window_body.workers.value
+function ui.getAssignedWorkersLabel(res)
+	return ui.views.building_view[1].window_body.workers.value
 end
 
-function getBuildingNameLabel()
-	return ui.building_view[1].window_header.title
+function ui.getBuildingNameLabel()
+	return ui.views.building_view[1].window_header.title
 end
 
-function getDateLabel()
-	return ui.top_info[1].top_bar.date
+function ui.getDateLabel()
+	return ui.views.top_info[1].top_bar.date
 end
 
-function toolButton(name)
+function ui.toolButton(name)
 	local canvas = love.graphics.newCanvas(button_bg:getWidth(), button_bg:getHeight())
 	local img = love.graphics.newImage('resources/gfx/gui/'..name..'.png')
 	
@@ -119,3 +146,4 @@ function toolButton(name)
 	})
 end
 
+return ui

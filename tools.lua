@@ -19,6 +19,16 @@ function buildTool(name)
 	}
 end
 
+function drawTool(i, j, tool)
+	local color = {}
+	if tool.canUse(i, j) then
+		color = {.25, .75, .25}
+	else
+		color = {.75, .25, .25}
+	end
+	Tile:new(tool.hoverTile):draw(i, j, {color = color})
+end
+
 tools = {
 	['road'] = buildTool('road'),
 	['chimney'] = buildTool('chimney'),
