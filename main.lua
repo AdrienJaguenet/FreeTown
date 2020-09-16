@@ -161,11 +161,10 @@ function love.draw()
 				local x = settings.MAP_SIZE - i + j
 				local y = j
 				local tile = map[x][y]
+				tile:draw(x, y, {layer = layer})
 				if tile.building then
 					tile.building:Draw(layer)
-				else
-					tile:draw(x, y, {layer = layer})
-				end
+				end	
 				if hover_coords.x == x and hover_coords.y == y then
 					-- draw the hover
 					drawTool(x, y, tool)
@@ -178,10 +177,9 @@ function love.draw()
 				local x = j
 				local y = settings.MAP_SIZE - i + j
 				local tile = map[x][y]
+				tile:draw(x, y, {layer = layer})
 				if tile.building then
 					tile.building:Draw(layer)
-				else
-					tile:draw(x, y, {layer = layer})
 				end
 				if hover_coords.x == x and hover_coords.y == y then
 					-- draw the hover

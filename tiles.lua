@@ -32,6 +32,10 @@ function loadTiles()
 						['0101'] = isoTile(terrain_tilemap, 1, 4),
 						['0110'] = isoTile(terrain_tilemap, 1, 4),
 						['0111'] = isoTile(terrain_tilemap, 1, 4),
+						['1000'] = isoTile(terrain_tilemap, 1, 4),
+						['1001'] = isoTile(terrain_tilemap, 1, 4),
+						['1010'] = isoTile(terrain_tilemap, 1, 4),
+						['1011'] = isoTile(terrain_tilemap, 1, 4),
 						['1100'] = isoTile(terrain_tilemap, 1, 4),
 						['1101'] = isoTile(terrain_tilemap, 1, 4),
 						['1110'] = isoTile(terrain_tilemap, 1, 4),
@@ -52,12 +56,16 @@ function loadTiles()
 						['0000'] = isoTile(terrain_tilemap, 1, 5),
 						['0001'] = isoTile(terrain_tilemap, 1, 5),
 						['0010'] = isoTile(terrain_tilemap, 1, 5),
-						['0011'] = isoTile(terrain_tilemap, 1, 5),
+						['0011'] = isoTile(terrain_tilemap, 2, 5),
 						['0100'] = isoTile(terrain_tilemap, 1, 5),
 						['0101'] = isoTile(terrain_tilemap, 1, 5),
 						['0110'] = isoTile(terrain_tilemap, 1, 5),
 						['0111'] = isoTile(terrain_tilemap, 1, 5),
-						['1100'] = isoTile(terrain_tilemap, 1, 5),
+						['1000'] = isoTile(terrain_tilemap, 1, 5),
+						['1001'] = isoTile(terrain_tilemap, 1, 5),
+						['1010'] = isoTile(terrain_tilemap, 1, 5),
+						['1011'] = isoTile(terrain_tilemap, 1, 5),
+						['1100'] = isoTile(terrain_tilemap, 3, 5),
 						['1101'] = isoTile(terrain_tilemap, 1, 5),
 						['1110'] = isoTile(terrain_tilemap, 1, 5),
 						['1111'] = isoTile(terrain_tilemap, 1, 5),
@@ -111,18 +119,6 @@ function Tile:getSprite(i, j, layer)
 		local east = getTile(i + 1, j)
 
 		local str = ''
-		if (west and west.type == self.type) then
-			str = str..'1'
-		else
-			str = str..'0'
-		end
-
-		if (east and east.type == self.type) then
-			str = str..'1'
-		else
-			str = str..'0'
-		end
-
 		if (north and north.type == self.type) then
 			str = str..'1'
 		else
@@ -130,6 +126,18 @@ function Tile:getSprite(i, j, layer)
 		end
 
 		if (south and south.type == self.type) then
+			str = str..'1'
+		else
+			str = str..'0'
+		end
+
+		if (west and west.type == self.type) then
+			str = str..'1'
+		else
+			str = str..'0'
+		end
+
+		if (east and east.type == self.type) then
 			str = str..'1'
 		else
 			str = str..'0'
