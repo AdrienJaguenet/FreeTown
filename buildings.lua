@@ -80,31 +80,6 @@ function register_protobuilding(name, def)
 	Building.protos[name] = proto
 end
 
-register_protobuilding('farm', {
-	gfx = gfx.tiles.farm,
-	OnCreate = function(building)
-		building.workers = 1
-		resources.used_workers = resources.used_workers + 1
-	end,
-	OnUpdate = function(farm, dt)
-		if farm.internal_counter > 0.1 then
-			farm.internal_counter = farm.internal_counter - 0.1
-		else
-			return
-		end
-
-		for i=0, farm.workers do
-			local ftile = farm:SelectRandomTile(2, function(t) return t.type == 'field' or t.type == 'grass' or t.type == 'trees' end)
-			if ftile and (ftile.type == 'grass' or ftile.type == 'trees') then
-				ftile.type = 'field'
-			elseif ftile and ftile.type == 'field' then
-				ftile.type = 'grass'
-				resources.food = resources.food + 3
-			end
-		end
-	end
-})
-
 register_protobuilding('house', {
 	gfx = gfx.tiles.house,
 	OnCreate = function(building)
