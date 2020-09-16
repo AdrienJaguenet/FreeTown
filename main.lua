@@ -48,11 +48,6 @@ function love.update(dt)
 	map:Update(dt)
 	camera.update(dt)
 	ui.update(dt)
-
-	-- quit when ctrl + q pressed
-	if love.keyboard.isDown('lctrl') and love.keyboard.isDown('q') then
-		love.event.quit();
-	end
 end
 
 function love.draw()
@@ -74,7 +69,7 @@ function love.mousepressed(x, y, k)
 	local tool = tools[current_tool]
 	iso.x = math.floor(iso.x)
 	iso.y = math.floor(iso.y)
-	if not building_selected and iso.x > 0 and iso.x <= settings.MAP_SIZE and iso.y > 0 and iso.y <= settings.MAP_SIZE then
+	if k == 1 and not building_selected and iso.x > 0 and iso.x <= settings.MAP_SIZE and iso.y > 0 and iso.y <= settings.MAP_SIZE then
 		if tool.canUse(iso.x, iso.y) then
 			tool.use(iso.x, iso.y)
 		else
@@ -82,6 +77,8 @@ function love.mousepressed(x, y, k)
 			sfx.err:play()
 			camera.shake(2)
 		end
+	elseif k == 2 then
+		current_tool = 'info'
 	end
 
 end
@@ -91,7 +88,7 @@ end
 
 function love.keyreleased(k)
 	if k == 'escape' then
-		current_tool = 'info'
+		love.event.quit();
 	end
 
 	if k == 'd' then
