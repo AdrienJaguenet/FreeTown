@@ -24,22 +24,22 @@ function loadTiles()
 			layers = {
 				{
 					oriented = {
-						['0000'] = isoTile(terrain_tilemap, 1, 4),
-						['0001'] = isoTile(terrain_tilemap, 5, 4),
-						['0010'] = isoTile(terrain_tilemap, 6, 4),
-						['0011'] = isoTile(terrain_tilemap, 7, 4),
-						['0100'] = isoTile(terrain_tilemap, 3, 4),
-						['0101'] = isoTile(terrain_tilemap, 1, 4),
-						['0110'] = isoTile(terrain_tilemap, 1, 4),
-						['0111'] = isoTile(terrain_tilemap, 1, 4),
-						['1000'] = isoTile(terrain_tilemap, 2, 4),
-						['1001'] = isoTile(terrain_tilemap, 1, 4),
-						['1010'] = isoTile(terrain_tilemap, 1, 4),
-						['1011'] = isoTile(terrain_tilemap, 1, 4),
-						['1100'] = isoTile(terrain_tilemap, 4, 4),
-						['1101'] = isoTile(terrain_tilemap, 1, 4),
-						['1110'] = isoTile(terrain_tilemap, 1, 4),
-						['1111'] = isoTile(terrain_tilemap, 1, 4),
+						['0000'] = isoTile(terrain_tilemap,  7, 4),
+						['0001'] = isoTile(terrain_tilemap,  2, 4),
+						['0010'] = isoTile(terrain_tilemap, 10, 4),
+						['0011'] = isoTile(terrain_tilemap,  4, 4),
+						['0100'] = isoTile(terrain_tilemap,  1, 4),
+						['0101'] = isoTile(terrain_tilemap,  3, 4),
+						['0110'] = isoTile(terrain_tilemap, 11, 4),
+						['0111'] = isoTile(terrain_tilemap,  5, 4),
+						['1000'] = isoTile(terrain_tilemap, 14, 4),
+						['1001'] = isoTile(terrain_tilemap,  8, 4),
+						['1010'] = isoTile(terrain_tilemap, 12, 4),
+						['1011'] = isoTile(terrain_tilemap,  6, 4),
+						['1100'] = isoTile(terrain_tilemap, 15, 4),
+						['1101'] = isoTile(terrain_tilemap,  9, 4),
+						['1110'] = isoTile(terrain_tilemap, 13, 4),
+						['1111'] = isoTile(terrain_tilemap,  7, 4),
 					}
 				}
 			}
