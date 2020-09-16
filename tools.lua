@@ -21,8 +21,6 @@ tools = {
 	['house'] = buildTool('house', function(tile)
 		resources.workers = resources.workers + 1
 	end),
-	['farm'] = buildTool('farm', function(tile)
-	end),
 	['info'] = {
 		hoverTile = 'tile_select',
 		use = function(i, j) 

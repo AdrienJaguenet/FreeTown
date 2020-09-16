@@ -234,7 +234,7 @@ function love.mousepressed(x, y, k)
 	local tool = tools[current_tool]
 	iso.x = math.floor(iso.x)
 	iso.y = math.floor(iso.y)
-	if not building_selected and iso.x > 0 and iso.x < settings.MAP_SIZE and iso.y > 0 and iso.y < settings.MAP_SIZE then
+	if not building_selected and iso.x > 0 and iso.x <= settings.MAP_SIZE and iso.y > 0 and iso.y <= settings.MAP_SIZE then
 		if tool.canUse(iso.x, iso.y) then
 			tool.use(iso.x, iso.y)
 		else
