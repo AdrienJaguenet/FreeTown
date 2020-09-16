@@ -6,11 +6,8 @@ settings = {
 	VERSION = '0.0.1-afarensis',
 	DEBUG = true
 }
-camera = {
-	x = 0,
-	y = 0,
-	zoom = 2
-}
+
+camera = require('camera')
 
 resources = {
 	workers = 1,
@@ -118,6 +115,8 @@ function love.update(dt)
 	if building_selected then
 		ui.building_view:update(dt)
 	end
+
+	camera.update(dt)
 	
 	-- quit when ctrl + q pressed
 	if love.keyboard.isDown('lctrl') and love.keyboard.isDown('q') then
@@ -241,6 +240,7 @@ function love.mousepressed(x, y, k)
 		else
 			sfx.err:stop()
 			sfx.err:play()
+			camera.shake(5)
 		end
 	end
 
@@ -252,6 +252,10 @@ end
 function love.keyreleased(k)
 	if k == 'escape' then
 		current_tool = 'info'
+	end
+
+	if k == 'l' then
+		camera.shake(30)
 	end
 end
 

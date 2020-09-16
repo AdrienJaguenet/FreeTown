@@ -161,7 +161,7 @@ function Tile:draw(i, j, settings)
 	draw_origin.y = draw_origin.y - sprite.extra_height
 	local c1, c2, c3 = love.graphics.getColor()
 	love.graphics.setColor(color[1], color[2], color[3])
-	love.graphics.draw(sprite.tilemap, sprite.quad, (draw_origin.x + camera.x) * camera.zoom, (draw_origin.y + camera.y) * camera.zoom,
+	love.graphics.draw(sprite.tilemap, sprite.quad, (draw_origin.x + camera.x + camera.offset.x) * camera.zoom, (draw_origin.y + camera.y + camera.offset.y) * camera.zoom,
 		0, camera.zoom, camera.zoom)
 	love.graphics.setColor(c1, c2, c3)
 end
