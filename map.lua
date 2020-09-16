@@ -47,7 +47,7 @@ function Map:GetMooreNeighbourhood(x, y) -- returns {N, S, W, E}
 		self:GetTile(x, y - 1), -- N
 		self:GetTile(x, y + 1), -- S
 		self:GetTile(x - 1, y), -- W
-		self:GetTile(x - 1, y) -- E
+		self:GetTile(x + 1, y) -- E
 end
 
 -- tells whether a tile is adjacent to another tile that follows an arbitrary criterion
