@@ -257,6 +257,10 @@ function love.keyreleased(k)
 	if k == 'l' then
 		camera.shake(30)
 	end
+
+	if k == 'd' then
+		settings.DEBUG = not settings.DEBUG
+	end
 end
 
 function love.keypressed(k)
