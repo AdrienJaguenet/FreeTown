@@ -113,10 +113,7 @@ end
 function Tile:getSprite(i, j, layer)
 	local obj = gfx.tiles[self.type].layers[layer]
 	if obj and obj.oriented then
-		local north = getTile(i, j - 1)
-		local south = getTile(i, j + 1)
-		local west = getTile(i - 1, j)
-		local east = getTile(i + 1, j)
+		local north, south, west, east = map:GetMooreNeighbourhood(i, j)
 
 		local str = ''
 		if (north and north.type == self.type) then

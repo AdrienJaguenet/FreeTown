@@ -19,36 +19,12 @@ resources = {
 date = os.time{year = 1953, month = 3, day = 5}
 date_accu = 0
 
-function createMap()
-	map = {}
-	for i=1,settings.MAP_SIZE do
-		map[i] = {}
-		for j=1,settings.MAP_SIZE do
-			local t = 'grass'
-			if math.random(1,5) < 4 then
-				t = 'trees'
-			end
-			map[i][j] = Tile:new(t)
-		end
-	end
-	local sx = math.random(1, settings.MAP_SIZE)
-	for i=1,settings.MAP_SIZE do
-		map[sx][i].type = 'river'
-		if math.random(1, 3) == 1 then
-			sx = math.max(1, sx - 1)
-			map[sx][i].type = 'river'
-		elseif math.random(1, 3) == 1 then
-			sx = math.min(settings.MAP_SIZE, sx + 1)
-			map[sx][i].type = 'river'
-		end
-	end
-end
-
 function love.load()
 	love.graphics.setDefaultFilter('nearest')
 	require('tiles')
 	require('ui')
 	require('tools')
+	require('map')
 	love.window.setMode(640, 480)
 	love.window.setTitle('FreeTown')
 	love.window.setFullscreen(true)
@@ -61,32 +37,8 @@ function love.load()
 	}
 	require('buildings')
 	loadUI()
-	createMap()
+	map = Map:new(settings.MAP_SIZE)
 	love.mouse.setGrabbed(true)
-end
-
-function getTile(x, y)
-	local row = map[x]
-	if row then
-		return map[x][y]
-	end
-end
-
-function getMooreNeighbourhood(x, y) -- returns {N, S, W, E}
-	return
-		getTile(x, y - 1), -- N
-		getTile(x, y + 1), -- S
-		getTile(x - 1, y), -- W
-		getTile(x - 1, y) -- E
-end
-
--- tells whether a tile is adjacent to another tile that follows an arbitrary criterion
-function isAdjacentTo(x, y, fn) 
-	local north, south, east, west = getMooreNeighbourhood(x, y)
-	return (north and fn(north)) or
-	       (south and fn(south)) or
-		   (west and fn(west)) or
-		   (east and fn(east))
 end
 
 function updateDate(dt)
@@ -101,15 +53,8 @@ end
 
 function love.update(dt)
 	updateDate(dt)
-	for i=1,settings.MAP_SIZE do
-		for j=1,settings.MAP_SIZE do
-			local tile = map[i][j]
-			local total_fields = 0
-			if tile.building then
-				tile.building:Update(dt)
-			end
-		end
-	end
+
+	map:Update(dt)
 
 	-- handle camera movement
 	local mx = love.mouse.getX()
@@ -172,54 +117,17 @@ end
 
 function love.draw()
 
-	local hover_coords = screen2iso(love.mouse.getX(), love.mouse.getY())
-	local tool = tools[current_tool]
-	hover_coords.y = math.floor(hover_coords.y)
-	hover_coords.x = math.floor(hover_coords.x)
-	-- for every layer
-	for layer=1,2 do
-		-- draw the upper half
-		for i=1,settings.MAP_SIZE do
-			for j=1,i do
-				local x = settings.MAP_SIZE - i + j
-				local y = j
-				local tile = map[x][y]
-				tile:draw(x, y, {layer = layer})
-				if tile.building then
-					tile.building:Draw(layer)
-				end	
-				if hover_coords.x == x and hover_coords.y == y then
-					-- draw the hover
-					drawTool(x, y, tool)
-				end
-			end
-		end
-		-- draw the lower half 
-		for i=settings.MAP_SIZE,1,-1 do
-			for j=1,i do
-				local x = j
-				local y = settings.MAP_SIZE - i + j
-				local tile = map[x][y]
-				tile:draw(x, y, {layer = layer})
-				if tile.building then
-					tile.building:Draw(layer)
-				end
-				if hover_coords.x == x and hover_coords.y == y then
-					-- draw the hover
-					drawTool(x, y, tool)
-				end
-			end
-		end
-	end
-
 	getFPSLabel():setText(love.timer.getFPS()..' FPS')
 	getDateLabel():setText(os.date("%d.%m.%Y", date))
-
-
 	getResourceLabel('workers'):setText('workers: '..resources.workers - resources.used_workers..'/'..resources.workers)
 	getResourceLabel('power'):setText('power: '..resources.power)
 	getResourceLabel('food'):setText('food: '..resources.food)
 
+	local hover_coords = screen2iso(love.mouse.getX(), love.mouse.getY())
+	hover_coords.y = math.floor(hover_coords.y)
+	hover_coords.x = math.floor(hover_coords.x)
+
+	map:Draw(hover_coords)
 
 	ui.top_info:draw()
 	ui.main_view:draw()

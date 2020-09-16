@@ -6,7 +6,7 @@ function Building:FindAllTilesAround(radius, fn)
 	local tiles = {}
 	for x=self.x-radius,self.x+radius do
 		for y=self.y-radius,self.y+radius do
-			local ftile = getTile(x, y)
+			local ftile = map:GetTile(x, y)
 			if ftile and fn(ftile) then
 				table.insert(tiles, ftile)
 			end

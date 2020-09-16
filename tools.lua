@@ -4,16 +4,16 @@ function buildTool(name)
 	return {
 		hoverTile = name,
 		use = function(i, j)
-			local tile = map[i][j]
+			local tile = map:GetTile(i, j)
 			tile.building = Building:New(name, i, j)
 			sfx.build:play()
 
 		end,
 		canUse = function(i, j)
-			local tile = getTile(i, j)
+			local tile = map:GetTile(i, j)
 			return (tile.type == 'grass' or tile.type == 'trees') -- check terrain type
 			   and (resources.workers - resources.used_workers > 0) -- enough workers
-			   and isAdjacentTo(i, j, function(t) return t.type == 'road' end) -- must be next to a road
+			   and map:IsAdjacentTo(i, j, function(t) return t.type == 'road' end) -- must be next to a road
 			   and not tile.building -- cannot build over an existing building
 		end
 	}
@@ -28,8 +28,8 @@ tools = {
 	['info'] = {
 		hoverTile = 'tile_select',
 		use = function(i, j) 
-			if map[i][j].building then
-				building_selected = map[i][j].building
+		if map:GetTile(i, j).building then
+				building_selected = map:GetTile(i, j).building
 			else
 				building_selected = nil
 			end
@@ -39,11 +39,12 @@ tools = {
 	['destroy'] = {
 		hoverTile = 'tile_select',
 		use = function(i, j)
-			if map[i][j].building then
-				map[i][j].building:Destroy()
-				map[i][j].building = nil
-			elseif map[i][j].type ~= 'grass' then
-				map[i][j].type = 'grass'
+			local tile = map:GetTile(i, j)
+			if tile.building then
+				tile.building:Destroy()
+				tile.building = nil
+			elseif tile.type ~= 'grass' then
+				tile.type = 'grass'
 			end
 		end,
 		canUse = function(i, j)
@@ -53,13 +54,13 @@ tools = {
 }
 
 tools['road'].use = function(i, j)
-	local tile = map[i][j]
+	local tile = map:GetTile(i, j)
 	tile.type = 'road'
 	sfx.build:play()
 end
 
 tools['road'].canUse = function(i, j)
-	local tile = getTile(i, j)
+	local tile = map:GetTile(i, j)
 	return (tile.type == 'grass' or tile.type == 'trees') -- check terrain type
 end
 
