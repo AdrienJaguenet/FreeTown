@@ -6,6 +6,6 @@
 
 ### How do I run this game?
 
-Use [Löve2D](https://love2d.or) (version 11). Run `love .` inside the directory.
+Use [Löve2D](https://love2d.org) (version 11). Run `love .` inside the directory.
 
 
