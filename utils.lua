@@ -55,11 +55,9 @@ end
 function utils.isTileVisibleOnScreen(i,j)
     local width, height = love.graphics.getDimensions()
     local draw_origin = utils.iso2screen(i, j)
-    local posOnScreen = {
-        x = (draw_origin.x + camera.x + camera.offset.x) * camera.zoom,
-        y = (draw_origin.y + camera.y + camera.offset.y) * camera.zoom
-    }
-    return (posOnScreen.x > -100 and posOnScreen.x < width) and (posOnScreen.y > -100 and posOnScreen.y < height)
+    local x = (draw_origin.x + camera.x + camera.offset.x) * camera.zoom
+    local y = (draw_origin.y + camera.y + camera.offset.y) * camera.zoom
+    return (x > -100 and x < width) and (y > -100 and y < height)
 end
     
 return utils
