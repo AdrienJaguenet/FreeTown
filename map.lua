@@ -66,6 +66,20 @@ function Map:Update(dt)
 	end
 end
 
+function Map:DrawTile(x, y, layer, hover_coords)
+	if (utils.isTileVisibleOnScreen(x,y)) then
+		local tile = self:GetTile(x, y)
+		tile:draw(x, y, {layer = layer})
+		if tile.building then
+			tile.building:Draw(layer)
+		end	
+		if hover_coords.x == x and hover_coords.y == y then
+			-- draw the hover
+			drawTool(x, y, tool)
+		end
+	end
+end
+
 function Map:Draw(hover_coords)
 	local tool = tools[current_tool]
 	-- for every layer
@@ -75,18 +89,7 @@ function Map:Draw(hover_coords)
 			for j=1,i do
 				local x = self.size - i + j
 				local y = j
-
-				if (utils.isTileVisibleOnScreen(x,y)) then
-					local tile = self:GetTile(x, y)
-					tile:draw(x, y, {layer = layer})
-					if tile.building then
-						tile.building:Draw(layer)
-					end	
-					if hover_coords.x == x and hover_coords.y == y then
-						-- draw the hover
-						drawTool(x, y, tool)
-					end
-				end
+				self:DrawTile(x, y, layer, hover_coords)
 			end
 		end
 		-- draw the lower half 
@@ -94,17 +97,7 @@ function Map:Draw(hover_coords)
 			for j=1,i do
 				local x = j
 				local y = self.size - i + j
-				if (utils.isTileVisibleOnScreen(x,y)) then
-					local tile = self:GetTile(x, y)
-					tile:draw(x, y, {layer = layer})
-					if tile.building then
-						tile.building:Draw(layer)
-					end
-					if hover_coords.x == x and hover_coords.y == y then
-						-- draw the hover
-						drawTool(x, y, tool)
-					end
-				end
+				self:DrawTile(x, y, layer, hover_coords)
 			end
 		end
 	end
