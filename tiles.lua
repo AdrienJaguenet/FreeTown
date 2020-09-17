@@ -51,6 +51,7 @@ function loadTiles()
 		},
 		road = {
 			layers = {
+				isoTile(terrain_tilemap, 1, 2),
 				{
 					oriented = {
 						['0000'] = isoTile(terrain_tilemap,  7, 5),
