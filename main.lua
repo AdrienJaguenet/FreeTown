@@ -1,5 +1,5 @@
 settings = {
-	MAP_SIZE = 40,
+	MAP_SIZE = 50,
 	CAMERA_SPEED = 500,
 	ISOTILE_HEIGHT = 20,
 	ISOTILE_WIDTH = 32,
@@ -11,6 +11,9 @@ settings = {
 camera = require('camera')
 ui = require('ui')
 utils = require('utils')
+
+profiler = require("libs/profiler")
+profilingInProgress = false
 
 resources = {
 	workers = 1,
@@ -93,6 +96,17 @@ function love.keyreleased(k)
 
 	if k == 'd' then
 		settings.DEBUG = not settings.DEBUG
+	end
+
+	if k == 'p' then
+		if not profilingInProgress then
+			profiler.start()
+			profilingInProgress = true
+		else
+			profiler.stop()
+			profiler.report('profiler.log')
+			profilingInProgress = false
+		end
 	end
 end
 
