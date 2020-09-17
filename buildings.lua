@@ -51,8 +51,8 @@ function Building:Draw(layer)
 	local layer = layer or #self.proto.gfx.layers
 	local sprite = self.proto.gfx.layers[layer]
 	if not sprite then return end
-	draw_origin.y = draw_origin.y - sprite.extra_height
-	love.graphics.draw(sprite.tilemap, sprite.quad, (draw_origin.x + camera.x + camera.offset.x) * camera.zoom, (draw_origin.y + camera.y + camera.offset.y) * camera.zoom,
+	draw_origin.y = draw_origin.y - sprite.extra_height * camera.zoom
+	love.graphics.draw(sprite.tilemap, sprite.quad, (draw_origin.x + camera.offset.x), (draw_origin.y + camera.offset.y), 
 		0, camera.zoom, camera.zoom)
 end
 

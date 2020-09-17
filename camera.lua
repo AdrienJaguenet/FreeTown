@@ -1,12 +1,19 @@
-local camera = {
-    x = 0,
-	y = 0,
-	zoom = 2,
-	currShakeAmount = 0,
-	shakeThreshold = 0.2,
-    shakeDamping = 20,
-    offset = {x = 0, y = 0}
-}
+Camera = {}
+Camera.__index = Camera
+
+function Camera:new()
+	local this = {	
+		x = 0,
+		y = 0,
+		zoom = 2,
+		currShakeAmount = 0,
+		shakeThreshold = 0.2,
+		shakeDamping = 20,
+		offset = {x = 0, y = 0}
+	}
+	setmetatable(this, Camera)
+	return this
+end
 
 function handleMovement(dt)
     local mx = love.mouse.getX()
@@ -24,19 +31,33 @@ function handleMovement(dt)
 	end
 end
 
-function camera.update(dt)
+function Camera:Update(dt)
     handleMovement(dt)
-    camera.offset = {x = love.math.random(-1, 1) * camera.currShakeAmount, y = love.math.random(-1, 1) * camera.currShakeAmount}
-    if camera.currShakeAmount > camera.shakeThreshold then
-        camera.currShakeAmount = camera.currShakeAmount - camera.currShakeAmount * camera.shakeDamping * dt
+    self.offset = {x = love.math.random(-1, 1) * self.currShakeAmount, y = love.math.random(-1, 1) * self.currShakeAmount}
+    if camera.currShakeAmount > self.shakeThreshold then
+        self.currShakeAmount = self.currShakeAmount - self.currShakeAmount * self.shakeDamping * dt
     else
-        camera.currShakeAmount = 0
+        self.currShakeAmount = 0
     end
 end
 
-function camera.shake(amount)
-    camera.currShakeAmount = amount
+function Camera:CenterOnMouse()
+	local x, y = love.mouse.getPosition()
+	local width, height = love.graphics.getDimensions()
+
+	self.x = self.x - (x - width / 2) / self.zoom
+	self.y = self.y - (y - height / 2) / self.zoom
+
+love.mouse.setPosition( width/2, height/2 )
 end
 
 
-return camera
+function Camera:Zoom(factor, isox, isoy)
+	self.zoom = self.zoom * factor
+	self:CenterOnMouse()
+end
+
+function Camera:Shake(amount)
+    self.currShakeAmount = amount
+end
+

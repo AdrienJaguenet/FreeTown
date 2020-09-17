@@ -155,10 +155,10 @@ function Tile:draw(i, j, settings)
 		return
 	end
 	local draw_origin = utils.iso2screen(i, j)
-	draw_origin.y = draw_origin.y - sprite.extra_height
+	draw_origin.y = draw_origin.y - sprite.extra_height * camera.zoom
 	local c1, c2, c3 = love.graphics.getColor()
 	love.graphics.setColor(color[1], color[2], color[3])
-	love.graphics.draw(sprite.tilemap, sprite.quad, (draw_origin.x + camera.x + camera.offset.x) * camera.zoom, (draw_origin.y + camera.y + camera.offset.y) * camera.zoom,
+	love.graphics.draw(sprite.tilemap, sprite.quad, (draw_origin.x + camera.offset.x), (draw_origin.y + camera.offset.y),
 		0, camera.zoom, camera.zoom)
 	love.graphics.setColor(c1, c2, c3)
 end

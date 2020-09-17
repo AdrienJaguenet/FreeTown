@@ -8,7 +8,7 @@ settings = {
 	FULLSCREEN = true
 }
 
-camera = require('camera')
+require('camera')
 ui = require('ui')
 utils = require('utils')
 
@@ -26,6 +26,7 @@ date = os.time{year = 1953, month = 3, day = 5}
 date_accu = 0
 
 function love.load()
+	camera = Camera:new()
 	love.graphics.setDefaultFilter('nearest')
 	require('tiles')
 	require('tools')
@@ -49,7 +50,7 @@ end
 function love.update(dt)
 	utils.updateDate(dt)
 	map:Update(dt)
-	camera.update(dt)
+	camera:Update(dt)
 	ui.update(dt)
 end
 
@@ -78,7 +79,7 @@ function love.mousepressed(x, y, k)
 		else
 			sfx.err:stop()
 			sfx.err:play()
-			camera.shake(2)
+			camera:Shake(2)
 		end
 	elseif k == 2 then
 		current_tool = 'info'
@@ -108,20 +109,23 @@ function love.keyreleased(k)
 			profilingInProgress = false
 		end
 	end
+
+	if k == 'space' then
+		camera:CenterOnMouse()
+	end
 end
 
 function love.keypressed(k)
 end
 
 function love.wheelmoved(x, y)
+	local mx, my = love.mouse.getPosition()
+	local isocoords = utils.screen2iso(mx, my)
+	mx, my = isocoords.x, isocoords.y
 	if y == -1 then
-		camera.zoom = camera.zoom / 2
-		camera.x = camera.x * 2
-		camera.y = camera.y * 2
+		camera:Zoom(0.5, mx, my)
 	elseif y == 1 then
-		camera.zoom = camera.zoom * 2
-		camera.x = camera.x / 2
-		camera.y = camera.y / 2
+		camera:Zoom(2, mx, my)
 	end
 end
 

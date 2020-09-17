@@ -2,8 +2,8 @@ local utils = {}
 
 function utils.iso2screen(i, j)
     return {
-		x = (i + j + 2) * settings.ISOTILE_WIDTH / 2,
-		y = -settings.ISOTILE_HEIGHT/2 + j * settings.ISOTILE_HEIGHT / 2 - i * settings.ISOTILE_HEIGHT / 2
+		x = (((i + j + 2) * settings.ISOTILE_WIDTH / 2) + camera.x) * camera.zoom,
+		y = ((-settings.ISOTILE_HEIGHT/2 + j * settings.ISOTILE_HEIGHT / 2 - i * settings.ISOTILE_HEIGHT / 2) + camera.y) * camera.zoom
 	}
 end
 
@@ -55,8 +55,8 @@ end
 function utils.isTileVisibleOnScreen(i,j)
     local width, height = love.graphics.getDimensions()
     local draw_origin = utils.iso2screen(i, j)
-    local x = (draw_origin.x + camera.x + camera.offset.x) * camera.zoom
-    local y = (draw_origin.y + camera.y + camera.offset.y) * camera.zoom
+    local x = (draw_origin.x + camera.offset.x)
+    local y = (draw_origin.y + camera.offset.y)
     return (x > -100 and x < width) and (y > -100 and y < height)
 end
     
