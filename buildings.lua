@@ -48,7 +48,7 @@ end
 
 function Building:Draw(layer)
 	local draw_origin = utils.iso2screen(self.x, self.y)
-	local layer = layer or #self.proto.gfx.layers
+	local layer = layer - 1 or #self.proto.gfx.layers
 	local sprite = self.proto.gfx.layers[layer]
 	if not sprite then return end
 	draw_origin.y = draw_origin.y - sprite.extra_height * camera.zoom
