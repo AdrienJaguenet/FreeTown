@@ -66,7 +66,7 @@ function Map:Update(dt)
 	end
 end
 
-function Map:DrawTile(x, y, layer, hover_coords)
+function Map:DrawTile(x, y, layer, hover_coords, tool)
 	if (utils.isTileVisibleOnScreen(x,y)) then
 		local tile = self:GetTile(x, y)
 		tile:draw(x, y, {layer = layer})
@@ -89,7 +89,7 @@ function Map:Draw(hover_coords)
 			for j=1,i do
 				local x = self.size - i + j
 				local y = j
-				self:DrawTile(x, y, layer, hover_coords)
+				self:DrawTile(x, y, layer, hover_coords, tool)
 			end
 		end
 		-- draw the lower half 
@@ -97,7 +97,7 @@ function Map:Draw(hover_coords)
 			for j=1,i do
 				local x = j
 				local y = self.size - i + j
-				self:DrawTile(x, y, layer, hover_coords)
+				self:DrawTile(x, y, layer, hover_coords, tool)
 			end
 		end
 	end
