@@ -12,28 +12,38 @@ function Map:new(size)
 	return this
 end
 
-function Map:Generate()
-	for i=1,self.size do
-		self.tiles[i] = {}
-		for j=1,self.size do
-			local t = 'grass'
-			if math.random(1,5) < 4 then
-				t = 'trees'
+function Map:FromServer(host, port)
+	local response = {}
+	local url = 'http://'..host..':'..port..'/map'
+	print(url)
+	local status, err= http.request{
+		url = url,
+		method = 'GET',
+		sink = ltn12.sink.table(response)
+	}
+	if not status then
+		print('HTTP error: '..err)
+	else
+		local res = ''
+		for _,v in pairs(response) do
+			res = res..v
+		end
+		print(res)
+		local table = json.decode(res)
+		self.size = table.size or settings.MAP_SIZE
+		for i=1,self.size do
+			self.tiles[i] = {}
+			for j=1,self.size do
+				print(i..', '..j)
+				local t = table.tiles[i][j].type or 'trees'
+				self.tiles[i][j] = Tile:new(t)
 			end
-			self.tiles[i][j] = Tile:new(t)
 		end
 	end
-	local sx = math.random(1, self.size)
-	for i=1,self.size do
-		self.tiles[sx][i].type = 'river'
-		if math.random(1, 3) == 1 then
-			sx = math.max(1, sx - 1)
-			self.tiles[sx][i].type = 'river'
-		elseif math.random(1, 3) == 1 then
-			sx = math.min(self.size, sx + 1)
-			self.tiles[sx][i].type = 'river'
-		end
-	end
+end
+
+function Map:Generate()
+	self:FromServer('localhost', 3000)
 end
 
 function Map:GetTile(x, y)
@@ -89,11 +99,12 @@ function Map:Draw(hover_coords)
 			for j=1,i do
 				local x = self.size - i + j
 				local y = j
+				print('x, y = '..x..', '..y)
 				self:DrawTile(x, y, layer, hover_coords, tool)
 			end
 		end
 		-- draw the lower half 
-		for i=settings.MAP_SIZE,1,-1 do
+		for i=self.size,1,-1 do
 			for j=1,i do
 				local x = j
 				local y = self.size - i + j
@@ -103,7 +114,4 @@ function Map:Draw(hover_coords)
 	end
 
 end
-
-
-map = Map:new(settings.MAP_SIZE)
 

@@ -11,7 +11,10 @@ settings = {
 require('camera')
 ui = require('ui')
 utils = require('utils')
+http = require('socket.http')
+ltn12 = require('ltn12')
 
+json = require('json')
 profiler = require("libs/profiler")
 profilingInProgress = false
 

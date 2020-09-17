@@ -112,6 +112,9 @@ function Tile:new(t)
 end
 
 function Tile:getSprite(i, j, layer)
+	if not gfx.tiles[self.type] then
+		error('Tile at '..i..', '..j..'has unknown type "'..self.type..'"')
+	end
 	local obj = gfx.tiles[self.type].layers[layer]
 	if obj and obj.oriented then
 		local north, south, west, east = map:GetMooreNeighbourhood(i, j)
