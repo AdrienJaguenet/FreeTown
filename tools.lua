@@ -6,6 +6,7 @@ function buildTool(name)
 		use = function(i, j)
 			local tile = map:GetTile(i, j)
 			tile.building = Building:New(name, i, j)
+			table.insert(map.buildings, tile.building)
 			sfx.build:play()
 
 		end,

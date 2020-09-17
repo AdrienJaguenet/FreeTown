@@ -4,7 +4,8 @@ Map.__index = Map
 function Map:new(size)
 	local this = {
 		size = size,
-		tiles = {}
+		tiles = {},
+		buildings = {}
 	}
 	setmetatable(this, Map)
 	this:Generate()
@@ -60,14 +61,8 @@ function Map:IsAdjacentTo(x, y, fn)
 end
 
 function Map:Update(dt)
-	for i=1,self.size do
-		for j=1, self.size do
-			local tile = self:GetTile(i, j)
-			local total_fields = 0
-			if tile.building then
-				tile.building:Update(dt)
-			end
-		end
+	for i,building in ipairs(self.buildings) do
+		building:Update(dt)
 	end
 end
 
