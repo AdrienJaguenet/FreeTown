@@ -35,8 +35,10 @@ function utils.drawDebugInfo()
     if tileAtCoords == nil then
         tileAtCoords = {type = "void"}
     end
+    local width, height = love.graphics.getDimensions()
     local debugText = love.graphics.newText(love.graphics.getFont(),
         'DEBUG INFO:\n'
+        ..'\nScreen dimensions: ' ..width ..'x' ..height
         ..'\nCamera position: x:'..math.floor(camera.x*100)/100 .. ', y:' ..math.floor(camera.y*100)/100
         ..'\nCamera zoom: ' ..camera.zoom
         ..'\nMouse screen position: x:' ..love.mouse.getX() .. ', y:' ..love.mouse.getY()
@@ -50,5 +52,14 @@ function utils.drawDebugInfo()
     love.graphics.draw(debugText, 10, 80)
 end
 
-
+function utils.isTileVisibleOnScreen(i,j)
+    local width, height = love.graphics.getDimensions()
+    local draw_origin = utils.iso2screen(i, j)
+    local posOnScreen = {
+        x = (draw_origin.x + camera.x + camera.offset.x) * camera.zoom,
+        y = (draw_origin.y + camera.y + camera.offset.y) * camera.zoom
+    }
+    return (posOnScreen.x > -100 and posOnScreen.x < width) and (posOnScreen.y > -100 and posOnScreen.y < height)
+end
+    
 return utils
